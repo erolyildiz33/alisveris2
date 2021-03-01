@@ -40,6 +40,7 @@ class Admin extends CI_Controller {
 		redirect('admin');
 	}
 	public function settings(){
-
+		$data['head']="Ayarlar";
+		$this->load->view('back/config',$data);
 	}
 }

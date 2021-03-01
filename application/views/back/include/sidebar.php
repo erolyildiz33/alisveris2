@@ -40,40 +40,46 @@
            <li class="nav-header">Menüler</li>
            <li class="nav-item">
             <a href="<?php echo base_url('admin/panel');?>" class="nav-link 
-              <?=($this->uri->segment(2)=="panel" && !$this->uri->segment(3))?"active":""?>">
+              <?=active("panel")?>">
               <i class="fa fa-home"></i>
               <p>Anasayfa</p>
             </a>
           </li>
-        </li>
-        
-      </ul>
-    </nav>
-    <!-- /.sidebar-menu -->
-  </div>
-  <!-- /.sidebar -->
-</aside>
+          <li class="nav-item">
+            <a href="<?php echo base_url('admin/settings');?>" class="nav-link 
+              <?=active("settings")?>">
+              <i class="fa fa-cog"></i>
+              <p>Ayarlar</p>
+            </a>
+          </li>
 
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0"><?=isset($head)?$head:""?></h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="<?php echo base_url();?>/assets/back/#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard v2</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
 
-  <!-- Main content -->
-  <section class="content">
-   <div class="container-fluid">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><?=isset($head)?$head:""?></h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="<?php echo base_url();?>/assets/back/#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard v2</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+     <div class="container-fluid">
