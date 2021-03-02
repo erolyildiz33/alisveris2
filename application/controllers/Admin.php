@@ -18,8 +18,8 @@ class Admin extends CI_Controller {
 	}
 	public function login()
 	{
-		$exist=Yonetim::find(['mail'=>$this->input->post("email"),
-			'password'=>$this->input->post("sifre")]);
+		$exist=Yonetim::find(['mail'=>postval("email"),
+			'password'=>postval("sifre")]);
 		if($exist){
 			$this->session->set_userdata('adminlogin',true);
 			$this->session->set_userdata('admininfo',$exist);
@@ -40,6 +40,23 @@ class Admin extends CI_Controller {
 		redirect('admin');
 	}
 	public function settings(){
+		$data['head']="Ayarlar";
+		$this->load->view('back/config',$data);
+	}
+
+	public function save_config(){
+		$data=['title'=>postval("title"),
+		'info'=>postval("info"),
+		'mail'=>postval("mail"),
+		'facebook'=>postval("facebook"),
+		'twitter'=>postval("twitter"),
+		'instagram'=>postval("instagram"),
+		'youtube'=>postval("youtube"),
+
+		];
+		$exist=Ayarlar::update(['mail'=>postval("email"),
+			'password'=>postval("sifre")]);
+
 		$data['head']="Ayarlar";
 		$this->load->view('back/config',$data);
 	}

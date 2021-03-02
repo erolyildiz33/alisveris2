@@ -11,7 +11,7 @@ function __construct()
 }
 function postval($val){
 	$ci=&get_instance();
-	return $ci->input->post($val);
+	return $ci->input->post($val,true);
 }
 
 function active($val){
