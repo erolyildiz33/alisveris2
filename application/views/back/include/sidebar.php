@@ -1,5 +1,5 @@
   <!-- /.navbar -->
-
+<input type="hidden" id="csrf_test_name" data-csrf="<?=$this->security->get_csrf_hash();?>">
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -38,20 +38,15 @@
           <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
            <li class="nav-header">Menüler</li>
-           <li class="nav-item">
-            <a href="<?php echo base_url('admin/panel');?>" class="nav-link 
-              <?=active("panel")?>">
-              <i class="fa fa-home"></i>
-              <p>Anasayfa</p>
-            </a>
+           <li class="nav-item"><a href="<?php echo base_url('admin/panel');?>" class="nav-link <?=active("panel")?>"><i class="fa fa-home"></i> <p> Anasayfa</p></a>
+           </li>
+           <li class="nav-item"><a href="<?php echo base_url('admin/settings');?>" class="nav-link <?=active("settings")?>">
+            <i class="fa fa-cog"></i> <p> Ayarlar</p></a>
           </li>
-          <li class="nav-item">
-            <a href="<?php echo base_url('admin/settings');?>" class="nav-link 
-              <?=active("settings")?>">
-              <i class="fa fa-cog"></i>
-              <p>Ayarlar</p>
-            </a>
+          <li class="nav-item"><a href="<?php echo base_url('admin/kategoriler');?>" class="nav-link <?=active("category")?>">
+            <i class="fa fa-cog"></i> <p> Kategoriler</p></a>
           </li>
+          <li class="nav-item"><a href="<?php echo base_url('admin/logout');?>"class="nav-link"><i class="fas fa-sign-out-alt"></i> <p> Çıkış Yap</p></a></li>
 
         </ul>
       </nav>
@@ -68,7 +63,9 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0"><?=isset($head)?$head:""?></h1>
+
           </div><!-- /.col -->
+
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url();?>/assets/back/#">Home</a></li>
@@ -83,3 +80,4 @@
     <!-- Main content -->
     <section class="content">
      <div class="container-fluid">
+      <?php mesajoku();?>

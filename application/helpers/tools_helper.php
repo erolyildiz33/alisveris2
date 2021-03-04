@@ -20,3 +20,54 @@ function active($val){
 		return "active";
 	}
 }
+
+function imageupload($filename,$path,$allowed){
+	$ci=&get_instance();
+	$config['upload_path']          = 'assets/upload/'.$path.'/';
+	$config['allowed_types']        = $allowed;
+	$ci->upload->initialize($config);
+
+
+
+	if($ci->upload->do_upload($filename)){
+		$image=$ci->upload->data();
+		return $config['upload_path'].$image['file_name'];
+
+	}else{
+		//$ci->session->flash_data();
+	}
+	
+	
+}
+
+
+function geri(){
+	return redirect($_SERVER['HTTP_REFERER']);
+}
+function mesaj($type,$icon,$title,$content=null){
+	$ci=&get_instance();
+	$mesaj= '<div class="alert alert-'.$type.' alert-dismissible">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+	<h5><i class="icon fas fa-'.$icon.'"></i> '.$title.'</h5>
+	'.$content.'
+	</div>';
+	$ci->session->set_flashdata('flashmessage',$mesaj);
+}
+function mesajoku(){
+	$ci=&get_instance();
+	echo $ci->session->flashdata('flashmessage');
+
+}
+
+
+function get_sub_category_title($category_id = 0){
+	$category = Kategoriler::select(
+		array(
+			"ustmenu"    => $category_id
+		)
+	);
+
+
+	return $category;
+
+}

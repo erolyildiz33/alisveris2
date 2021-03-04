@@ -74,12 +74,12 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'dsn'	=> 'mysql:host=127.0.0.1; dbname=alisveris; charset=utf8;',
+	'hostname' => '',
 	'username' => 'root',
 	'password' => '1234',
 	'database' => 'alisveris',
-	'dbdriver' => 'mysqli',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

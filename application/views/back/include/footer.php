@@ -44,6 +44,11 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url();?>/assets/back/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url();?>/assets/back/dist/js/pages/dashboard2.js"></script>
+<script src="<?php echo base_url();?>assets/back/dist/js/pages/dashboard2.js"></script>
+<script src="<?php echo base_url(); ?>assets/back/build/js/jquery-ui.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/back/build/js/sweetalert2.all.js"></script>
+<script src="<?php echo base_url(); ?>assets/back/build/js/iziToast.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/back/build/switchery/dist/switchery.min.js"></script>
+<script src="<?php echo base_url();?>assets/back/build/js/custom.js"></script>
 </body>
 </html>

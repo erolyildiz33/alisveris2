@@ -17,7 +17,8 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>Site Adı</label>
-								<input type="text" class="form-control" name="title" placeholder="Site Adı" required>
+								<input type="text" value="<?=$config->title?>" class="form-control" name="title" placeholder="Site Adı" required>
+								<input type="hidden" name="configid" value="<?=$config->id?>">
 							</div>
 						</div>
 					</div>
@@ -25,7 +26,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>Mail Adresi</label>
-								<input type="email" class="form-control" name="mail" placeholder="Mail Adresi" required>
+								<input type="email" class="form-control" value="<?=$config->mail?>" name="mail" placeholder="Mail Adresi" required>
 							</div>
 						</div>
 					</div>
@@ -33,7 +34,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>Adres</label>
-								<textarea name="info"class="form-control" rows="3" required></textarea> 
+								<textarea name="info"class="form-control" rows="3" required><?=$config->info?></textarea> 
 							</div>
 						</div>
 					</div>
@@ -61,7 +62,8 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Facebook</label>
-								<input type="text" name="facebook" class="form-control">
+								<input type="text" name="facebook" value="<?=$config->facebook?>" class="form-control">
+								
 
 							</div>
 						</div>
@@ -69,7 +71,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Twitter</label>
-								<input type="text" name="twitter" class="form-control">
+								<input type="text" name="twitter" value="<?=$config->twitter?>" class="form-control">
 
 							</div>
 						</div>
@@ -80,14 +82,14 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Youtube</label>
-								<input type="text" name="youtube" class="form-control">
+								<input type="text" name="youtube" value="<?=$config->youtube?>" class="form-control">
 
 							</div>	
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Instagram</label>
-								<input type="text" name="instagram" class="form-control">
+								<input type="text" name="instagram" value="<?=$config->instagram?>" class="form-control">
 
 							</div>
 						</div>

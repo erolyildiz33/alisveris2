@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="<?php echo base_url();?>/assets/back/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url();?>/assets/back/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<?php echo base_url("assets"); ?>/back/build/css/iziToast.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/back/build/switchery/dist/switchery.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -32,16 +34,16 @@
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    <div class="form-inline ml-3">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-navbar" id="arama" name="arama" type="search" placeholder="Ara" aria-label="Search">
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
+          <button class="btn btn-navbar" type="button" id="arabuton">
+            <i class="fas fa-search" ></i>
           </button>
         </div>
       </div>
-    </form>
+    </div>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
