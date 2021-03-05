@@ -94,7 +94,7 @@ public function save_category(){
 	$validate = $this->form_validation->run();
 
 	if($validate){
-		$exist=Kategoriler::select(["title"=> postval("title")]);
+		$exist=Kategoriler::select(["title"=> postval("title"),"ustmenu"=>postval("altid")]);
 		if (!$exist){
 			$rank=Kategoriler::select(["ustmenu"=>0], ["rank"=>"desc"],1);
 			$insert = Kategoriler::insert(array(

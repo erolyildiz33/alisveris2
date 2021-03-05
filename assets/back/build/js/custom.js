@@ -41,14 +41,6 @@ AjaxPost = function (url, postdata) {
     return result;
 }
 
-
-$(document).on("click", ".iptalaltekle", function () {
-    $("#altekle").html("");
-    $("#altekle").attr("status", "false");
-    $("#altekle").removeAttr('addid');
-
-});
-
 function aramaYap(kelime) {
     $aramasonuc = AjaxPost( "/admin/findKategori", {
         title: kelime,
@@ -90,43 +82,44 @@ function aramaYap(kelime) {
         $.each(altmenuler, (function (index, element) {
             checked = (element.isActive == 1) ? "checked" : " ";
             mylist = (AjaxGet(geturl + "getaltkategori/" + element.id)) ?
-            '<button data-altid="' + element.id + '"style="margin-left: 10px;float: left;"' +
+            '<button data-altid="' + element.id + '" style="margin-left: 1rem;"' +
             'data-geturl="' + geturl + '"' +
             'data-getustid="' + altid + '"' +
             'data-title="' + element.ustname + '"' +
-            'class="btn btn-sm btn-warning btn-outline add-btn altgetir" data-analiste="evet">' +
-            '<i class="fa fa-cog"></i> Alt Kategori İşlemleri' +
+            'class="btn btn-sm btn-warning btn-outline add-btn altgetir">' +
+            '<i class="fa fa-cog"></i><span class="d-none d-sm-inline"> Alt Kategori İşlemleri</span>' +
             '</button>'
             : " ";
             alticerikliste += '<tr>' +
 
-            '<td>' + element.ustname + '</td>' +
+            '<td><strong>' + element.ustname + '</strong></td>' +
             '<td>' + element.title + '</td>' +
             '<td class="text-center w100">' +
+
             '<input data-url="' + geturl + 'isActiveSetter/' + element.id + '"' +
             'class="isActive altactive' + altid + '" type="checkbox" data-switchery data-color="#10c469" ' + checked + ' /></td>' +
             '<td class="w400 text-center">' +
-            '<div class="text-center" style="margin-left: 30px;">' +
-            '<a data-altid="' + element.id + '" data-title="' + element.title + '"' +
+            '<div class="d-flex justify-content-center" >'+
+            '<button data-altid="' + element.id + '" data-title="' + element.title + '"' +
             'data-url="' + geturl + "save_subcategory" + '"' +
-
-            'style="float: left;"' +
-            'class="btn btn-sm btn-success btn-outline add-btn altekle" data-analiste="evet">' +
-            '<i class="fa fa-plus"></i> Alt Kategori Ekle </a>' +
+            'type="button" data-toggle="modal" data-target="#myModal"'+            
+            'class="btn btn-sm btn-success btn-outline add-btn altekle" >' +
+            '<i class="fa fa-plus"></i><span class="d-none d-sm-inline"> Alt Kategori Ekle</span></button>' +
             mylist +
-            ' </div>' +
+            '</div> </div>' +
             '</td>' +
             '<td class="text-center w300" >' +
+            '<div class="d-flex justify-content-center">'+
             '<button ' +
             'data-url="' + geturl + 'delete/' + element.id + '"' +
-            ' class="btn btn-sm btn-danger btn-outline remove-btn" style="margin-left: 30px;" data-analiste="evet">' +
-            '<i class="fa fa-trash"></i> Sil ' +
+            ' class="btn btn-sm btn-danger btn-outline remove-btn"> ' +
+            '<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil</span>' +
             '</button> ' +
-            '<button data-altid="' + element.id + '"' +
+            '<button data-altid="' + element.id + '" style="margin-left: 1rem;"' +
             'data-title="' + element.title + '"' +
             'data-url="' + geturl + 'categoriy_update/' + element.id + '"' +
-            'class="btn btn-sm btn-info btn-outline altguncelle" data-analiste="evet">' +
-            '<i class="fa fa-pencil-square-o"></i> Düzenle' +
+            'class="btn btn-sm btn-info btn-outline altguncelle" >' +
+            '<i class="fas fa-edit"></i><span class="d-none d-sm-inline"> Düzenle</span>' +
             '</button></td> </tr>';
 
         }));
@@ -140,7 +133,7 @@ function aramaYap(kelime) {
         '</div>' +
         ' <div class="col-md-12">' +
         '<div class="widget p-lg">' +
-        '<table class="table table-hover table-striped table-bordered alt-container">' +
+        '<table class="table table-responsive table-hover table-striped table-bordered alt-container">' +
         '<thead>' +
         '<th>Üst Kategori</th>' +
         '<th>Başlık</th>' +
@@ -177,50 +170,68 @@ $("#arama").on('keypress', function (e) {
     }
 });
 
-$(document).on('click', '.altguncelle', function () {
+$(document).on('click', '.altekle', function () {  
+   var title = $(this).data("title");
+   var altid = $(this).data("altid");
+   var url = $(this).data("url");
+   $("#myModalLabel").html('<h4 class="modal-title"><b>' + title + '</b> Kategorisine Alt Kategorisi Ekle</h4>');
+   $("#modalform").attr("action",url);
+   var ekle = '<div class="row">' +
+   '<div class="col-md-12">' +
+   '<div class="widget">' +
+   '<div class="widget-body">' +    
+   '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
+   '<input type="hidden" name="anamenu" value="' + altid + '">' +
+   '<div class="form-group">' +   
+   '<input class="form-control" placeholder="Başlık" name="title" autocomplete="off">' +
+   '</div></div></div></div></div>';
+   var footer='<button type="submit" class="btn btn-primary">Güncelle</button>' +
+   '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
+   $("#modalfooter").html(footer);
+   $("#modalbody").html(ekle);
+   
+});
+
+$(document).on('click', '.yeniekle', function () {
     var altid = $(this).data("altid");
-    var title = $(this).data("title");
     var url = $(this).data("url");
-    var durum = $("#altekle").attr('status');
-    var sonid = $("#altekle").attr('addid');
-    var ekle = '<div class="card">'+
-    '<div class="card-body">' +
-    '<div class="row">'+
-    '<div class="col-md-12">' +
-    '<h4 class="m-b-lg">' +
-    '<b>' + title + '</b> Kategorisini düzenliyorsunuz' +
-    '</h4>' +
-    '</div>' +
+    $("#myModalLabel").html('<h2 class="modal-title"><b>Yeni</b> Kategori Ekle</h2>');
+    $("#modalform").attr("action",url);
+    var ekle = '<div class="row">' +
     '<div class="col-md-12">' +
     '<div class="widget">' +
-    '<div class="widget-body">' +
-    '<form action="' + url + '" method="post"  autocomplete="off">' +
+    '<div class="widget-body">' +    
+    '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
+    '<input type="hidden" name="altid" value="' + altid + '">' +
+    '<div class="form-group">' +   
+    '<input class="form-control" placeholder="Başlık" name="title" autocomplete="off">' +
+    '</div></div></div></div></div>';
+    var footer='<button type="submit" class="btn btn-primary">Kaydet</button>' +
+    '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
+    $("#modalfooter").html(footer);
+    $("#modalbody").html(ekle);
+
+
+});
+$(document).on('click', '.altguncelle', function () {
+    var title = $(this).data("title");
+    var altid = $(this).data("altid");
+    var url = $(this).data("url");
+    $("#myModalLabel").html('<h3 class="modal-title"><b>' + title + '</b> Kategorisini düzenliyorsunuz</h3>');
+    $("#modalform").attr("action",url);
+    var ekle = '<div class="row">' +
+    '<div class="col-md-12">' +
+    '<div class="widget">' +
+    '<div class="widget-body">' +    
     '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
     '<input type="hidden" name="anamenu" value="' + altid + '">' +
-    '<div class="form-group">' +
-    '<label>Başlık</label>' +
-    '<input class="form-control" placeholder="Başlık" name="title" value="' + title + '">' +
-    '</div>' +
-    '<button type="submit" class="btn btn-primary btn-md btn-outline">Güncelle</button>' +
-    '<span class="btn btn-md btn-danger btn-outline iptalaltekle">İptal</span>' +
-    '</form></div></div></div></div></div></div>';
-
-    if (durum == "true" && altid == sonid) {
-        ekle = "";
-        $("#altekle").attr("status", "false");
-        $("#altekle").removeAttr('addid')
-    } else if (durum == "true" && altid != sonid) {
-        $("#altekle").attr('addid', altid);
-        $("#altekle").attr('status', "true");
-    } else {
-        $("#altekle").attr('status', "true");
-        $("#altekle").attr('addid', altid);
-    }
-
-
-    $("#altekle").html(ekle);
-    sonid = "";
-
+    '<div class="form-group">' +   
+    '<input class="form-control" placeholder="Başlık" name="title" autocomplete="off" value="' + title + '">' +
+    '</div></div></div></div></div>';
+    var footer='<button type="submit" class="btn btn-primary">Güncelle</button>' +
+    '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
+    $("#modalfooter").html(footer);
+    $("#modalbody").html(ekle);
 });
 
 
@@ -354,45 +365,47 @@ $(document).on('click', '.altgetir', function () {
     $.each(altmenuler, (function (index, element) {
         checked = (element.isActive == 1) ? "checked" : " ";
         mylist = (AjaxGet(geturl + "getaltkategori/" + element.id)) ?
-        '<button data-altid="' + element.id + '"style="margin-left: 10px;float: left;"' +
+        '<button data-altid="' + element.id + '"style="margin-left: 1rem;"' +
         'data-geturl="' + geturl + '"' +
         'data-getustid="' + altid + '"' +
         'data-title="' + element.title + '"' +
-        'class="btn btn-sm btn-warning btn-outline add-btn altgetir" data-analiste="evet">' +
-        '<i class="fa fa-cog"></i> Alt Kategori İşlemleri' +
+        'class="btn btn-sm btn-warning btn-outline add-btn altgetir">' +
+        '<i class="fa fa-cog"></i><span class="d-none d-sm-inline"> Alt Kategori İşlemleri</span>' +
         '</button>'
         : " ";
         alticerikliste += '<tr id="ord-' + element.id + '">' +
         '<td class="order"><i class="fa fa-reorder"></i></td>' +
         '<td class="w50 text-center sirano' + altid + '">' + say++ + '</td>' +
-        '<td>' + title + '</td>' +
+        '<td><strong>' + title + '</strong></td>' +
         '<td>' + element.title + '</td>' +
         '<td class="text-center w100">' +
         '<input data-url="' + geturl + 'isActiveSetter/' + element.id + '"' +
         'class="isActive altactive' + altid + '" type="checkbox" data-switchery data-color="#10c469" ' + checked + ' /></td>' +
         '<td class="w400 text-center">' +
-        '<div class="text-center" style="margin-left: 30px;">' +
-        '<a data-altid="' + element.id + '" data-title="' + element.title + '"' +
+        '<div class="d-flex justify-content-center" >' +
+        '<button data-altid="' + element.id + '" data-title="' + element.title + '"' +
+        'type="button" data-toggle="modal" data-target="#myModal"'+
         'data-url="' + geturl + "save_subcategory" + '"' +
 
-        'style="float: left;"' +
-        'class="btn btn-sm btn-success btn-outline add-btn altekle" data-analiste="evet">' +
-        '<i class="fa fa-plus"></i> Alt Kategori Ekle </a>' +
+        'class="btn btn-sm btn-success btn-outline add-btn altekle">' +
+        '<i class="fa fa-plus"></i><span class="d-none d-sm-inline"> Alt Kategori Ekle</span></button>' +
         mylist +
         ' </div>' +
         '</td>' +
         '<td class="text-center w300" >' +
-        '<button ' +
-        'data-url="' + geturl + 'delete/' + element.id + '"' +
-        ' class="btn btn-sm btn-danger btn-outline remove-btn" style="margin-left: 30px;" data-analiste="evet">' +
-        '<i class="fa fa-trash"></i> Sil ' +
+        '<div class="d-flex justify-content-center">'+
+        '<button  data-url="' + geturl + 'delete/' + element.id + '"' +
+        ' class="btn btn-sm btn-danger btn-outline remove-btn">' +
+        '<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil</span>' +
         '</button>' +
         '<button data-altid="' + element.id + '"' +
+        'type="button" data-toggle="modal" data-target="#myModal"'+
+        'style="margin-left: 1rem;"'+
         'data-title="' + element.title + '"' +
         'data-url="' + geturl + 'categoriy_update/' + element.id + '"' +
-        'class="btn btn-sm btn-info btn-outline altguncelle" data-analiste="evet">' +
-        '<i class="fa fa-pencil-square-o"></i> Düzenle' +
-        '</button></td> </tr>';
+        'class="btn btn-sm btn-info btn-outline altguncelle">' +
+        '<i class="fas fa-edit"></i><span class="d-none d-sm-inline"> Düzenle</span>' +
+        '</button></div></td> </tr>';
 
     }));
     var content = '<div class="card">'+
@@ -405,14 +418,14 @@ $(document).on('click', '.altgetir', function () {
     '</div>' +
     ' <div class="col-md-12">' +
     '<div class="widget p-lg">' +
-    '<table class="table table-hover table-striped table-bordered alt-container">' +
+    '<table class="table table-responsive table-hover table-striped table-bordered alt-container">' +
     '<thead>' +
     '<th class="order"><i class="fa fa-reorder"></i></th>' +
     '<th class="w50">Sıra</th>' +
     '<th>Üst Kategori</th>' +
     '<th>Başlık</th>' +
     '<th>Durumu</th>' +
-    '<th>Alt Kategori</th>' +
+    '<th class="tex-center">Alt Kategori</th>' +
     '<th>İşlem</th>' +
     '</thead>' +
     '<tbody class="sortable" data-sirano="' + altid + '" data-sorttableid="' + altid + '" data-url="' + geturl + 'rankSetter">' + alticerikliste +
@@ -446,105 +459,6 @@ $(document).on('click', '.altgetir', function () {
     })
 });
 
-$(document).on('click', '.altekle', function () {
-    var altid = $(this).data("altid");
-    var title = $(this).data("title");
-    var url = $(this).data("url");
-    var durum = $("#altekle").attr('status');
-    var sonid = $("#altekle").attr('addid');
-    var ekle = '<div class="card">'+
-    '<div class="card-body">' +
-    '<div class="row">' +
-    '<div class="col-md-12">' +
-    '<h4 class="m-b-lg">' +
-    '<b>' + title + '</b> Kategorisine Alt Kategorisi Ekle' +
-    '</h4>' +
-    '</div>' +
-    '<div class="col-md-12">' +
-    '<div class="widget">' +
-    '<div class="widget-body">' +
-    '<form action="' + url + '" method="post"  autocomplete="off">' +
-    '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
-    '<input type="hidden" name="anamenu" value="' + altid + '">' +
-    '<div class="form-group">' +
-    '<label>Başlık</label>' +
-    '<input class="form-control" placeholder="Başlık" name="title">' +
-    '</div>' +
-    '<button type="submit" class="btn btn-primary btn-md btn-outline add_sub_category">Kaydet</button>' +
-    '<span class="btn btn-md btn-danger btn-outline iptalaltekle">İptal</span>' +
-    '</form>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div></div></div>';
-
-
-    if (durum == "true" && altid == sonid) {
-        ekle = "";
-        $("#altekle").attr("status", "false");
-        $("#altekle").removeAttr('addid')
-    } else if (durum == "true" && altid != sonid) {
-        $("#altekle").attr('addid', altid);
-        $("#altekle").attr('status', "true");
-    } else {
-        $("#altekle").attr('status', "true");
-        $("#altekle").attr('addid', altid);
-    }
-
-
-    $("#altekle").html(ekle);
-    sonid = "";
-
-});
-
-$(document).on('click', '.yeniekle', function () {
-    var altid = $(this).data("altid");
-    var url = $(this).data("url");
-    var durum = $("#altekle").attr('status');
-    var sonid = $("#altekle").attr('addid');
-    var ekle =  '<div class="card">'+
-    '<div class="card-body">' +
-    '<div class="row">' +
-    '<div class="col-md-12">' +
-    '<h4 class="m-b-lg">' +
-    '<b>Yeni</b> Kategori Ekle' +
-    '</h4>' +
-    '</div>' +
-    '<div class="col-md-12">' +
-    '<div class="widget">' +
-    '<div class="widget-body">' +
-    '<form action="' + url + '" method="post"  autocomplete="off">' +
-    '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
-    '<div class="form-group">' +
-    '<label>Başlık</label>' +
-    '<input class="form-control" placeholder="Başlık" name="title">' +
-    '</div>' +
-    '<button type="submit" class="btn btn-primary btn-md btn-outline">Kaydet</button>' +
-    '<span class="btn btn-md btn-danger btn-outline iptalaltekle">İptal</span>' +
-    '</form>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div></div></div>';
-
-
-    if (durum == "true" && altid == sonid) {
-        ekle = "";
-        $("#altekle").attr("status", "false");
-        $("#altekle").removeAttr('addid')
-    } else if (durum == "true" && altid != sonid) {
-        $("#altekle").attr('addid', altid);
-        $("#altekle").attr('status', "true");
-    } else {
-        $("#altekle").attr('status', "true");
-        $("#altekle").attr('addid', altid);
-    }
-
-
-    $("#altekle").html(ekle);
-    sonid = "";
-
-});
 
 $(document).ready(function () {
     $(".image_list_container").on('change', '.isCover', function () {
