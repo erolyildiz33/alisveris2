@@ -1,24 +1,24 @@
   </div><!--/. container-fluid -->
 
- </section>
-    <!-- /.content -->
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+
+<!-- Main Footer -->
+<footer class="main-footer">
+  <strong>Copyright &copy; 2014-2020 <a href="<?php echo base_url();?>/assets/back/https://adminlte.io">AdminLTE.io</a>.</strong>
+  All rights reserved.
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Version</b> 3.1.0-rc
   </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
- <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2020 <a href="<?php echo base_url();?>/assets/back/https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0-rc
-    </div>
-  </footer>
+</footer>
 </div>
 <!-- ./wrapper -->
 
@@ -50,5 +50,13 @@
 <script src="<?php echo base_url(); ?>assets/back/build/js/iziToast.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/back/build/switchery/dist/switchery.min.js"></script>
 <script src="<?php echo base_url();?>assets/back/build/js/custom.js"></script>
+<?php 
+if (is_file(APPPATH.'views/' . 'back/include/includes/'.$this->uri->segment(2) . EXT))
+{
+     $this->load->view('back/include/includes/'.$this->uri->segment(2));
+}
+
+
+?>
 </body>
 </html>

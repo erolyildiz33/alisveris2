@@ -12,7 +12,7 @@
 
 		<div class="card">
 			<div class="card-body">
-				<form action="<?=base_url('admin/save_config')?>" method="post" autocomplete="off" enctype="multipart/form-data">
+				<form action="<?=base_url('admin/save_ayarlar')?>" method="post" autocomplete="off" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">

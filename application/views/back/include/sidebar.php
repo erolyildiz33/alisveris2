@@ -40,11 +40,14 @@
            <li class="nav-header">Menüler</li>
            <li class="nav-item"><a href="<?php echo base_url('admin/panel');?>" class="nav-link <?=active("panel")?>"><i class="fa fa-home"></i> <p> Anasayfa</p></a>
            </li>
-           <li class="nav-item"><a href="<?php echo base_url('admin/settings');?>" class="nav-link <?=active("settings")?>">
+           <li class="nav-item"><a href="<?php echo base_url('admin/ayarlar');?>" class="nav-link <?=active("ayarlar")?>">
             <i class="fa fa-cog"></i> <p> Ayarlar</p></a>
           </li>
-          <li class="nav-item"><a href="<?php echo base_url('admin/kategoriler');?>" class="nav-link <?=active("category")?>">
+          <li class="nav-item"><a href="<?php echo base_url('admin/kategoriler');?>" class="nav-link <?=active("kategoriler")?>">
             <i class="fa fa-cog"></i> <p> Kategoriler</p></a>
+          </li>
+          <li class="nav-item"><a href="<?php echo base_url('admin/secenekler');?>" class="nav-link <?=active("secenekler")?>">
+            <i class="fa fa-sort"></i> <p> Ürün Seçenekleri</p></a>
           </li>
           <li class="nav-item"><a href="<?php echo base_url('admin/logout');?>"class="nav-link"><i class="fas fa-sign-out-alt"></i> <p> Çıkış Yap</p></a></li>
 
