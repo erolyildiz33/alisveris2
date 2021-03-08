@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 05 Mar 2021, 15:00:28
+-- Üretim Zamanı: 08 Mar 2021, 16:03:00
 -- Sunucu sürümü: 5.7.27-log
 -- PHP Sürümü: 7.4.14
 
@@ -78,7 +78,9 @@ INSERT INTO `categories` (`id`, `ustmenu`, `title`, `rank`, `isActive`, `created
 (28, 27, 'dasdsa', 0, 1, '2021-03-04 15:32:14'),
 (29, 1, 'yeni', 2, 0, '2021-03-04 15:42:01'),
 (32, 29, 'deneme', 0, 1, '2021-03-04 16:58:11'),
-(33, 0, 'yeni-2', 3, 1, '2021-03-05 10:06:27');
+(33, 0, 'yeni-2', 3, 1, '2021-03-05 10:06:27'),
+(34, 32, 'aaa', 0, 1, '2021-03-08 13:21:24'),
+(35, 34, 'asdsad', 0, 1, '2021-03-08 13:21:43');
 
 -- --------------------------------------------------------
 
@@ -106,6 +108,73 @@ CREATE TABLE `config` (
 INSERT INTO `config` (`id`, `title`, `logo`, `icon`, `info`, `mail`, `facebook`, `instagram`, `youtube`, `twitter`) VALUES
 (1, 'eTicaret Sitesi-update', '', '', 'mersin', 'admin@admin.com', 'face', 'instag', 'youtube', 'twitter');
 
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `options`
+--
+
+CREATE TABLE `options` (
+  `id` int(11) NOT NULL,
+  `name` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `slug` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+--
+-- Tablo döküm verisi `options`
+--
+
+INSERT INTO `options` (`id`, `name`, `slug`) VALUES
+(6, 'Numara', 'numara'),
+(7, 'Boy', 'boy'),
+(8, 'En', 'en'),
+(9, 'Kilo', 'kilo'),
+(12, 'aaa', 'aaa');
+
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `category` int(254) NOT NULL,
+  `subcategory` int(254) NOT NULL,
+  `title` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `subtitle` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_turkish_ci NOT NULL,
+  `price` float DEFAULT NULL,
+  `discount` float DEFAULT NULL,
+  `tag` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `complete` int(1) NOT NULL DEFAULT '0',
+  `active` int(1) NOT NULL DEFAULT '0',
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `suboptions`
+--
+
+CREATE TABLE `suboptions` (
+  `id` int(11) NOT NULL,
+  `option_id` int(20) NOT NULL,
+  `name` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+--
+-- Tablo döküm verisi `suboptions`
+--
+
+INSERT INTO `suboptions` (`id`, `option_id`, `name`) VALUES
+(2, 6, '33'),
+(3, 6, '34'),
+(4, 6, '35'),
+(5, 6, '36'),
+(6, 6, '32');
+
 --
 -- Dökümü yapılmış tablolar için indeksler
 --
@@ -129,6 +198,24 @@ ALTER TABLE `config`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Tablo için indeksler `options`
+--
+ALTER TABLE `options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Tablo için indeksler `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Tablo için indeksler `suboptions`
+--
+ALTER TABLE `suboptions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Dökümü yapılmış tablolar için AUTO_INCREMENT değeri
 --
 
@@ -142,13 +229,31 @@ ALTER TABLE `admin`
 -- Tablo için AUTO_INCREMENT değeri `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `config`
 --
 ALTER TABLE `config`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Tablo için AUTO_INCREMENT değeri `options`
+--
+ALTER TABLE `options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Tablo için AUTO_INCREMENT değeri `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Tablo için AUTO_INCREMENT değeri `suboptions`
+--
+ALTER TABLE `suboptions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

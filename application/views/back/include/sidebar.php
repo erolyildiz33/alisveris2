@@ -49,6 +49,9 @@
           <li class="nav-item"><a href="<?php echo base_url('admin/secenekler');?>" class="nav-link <?=active("secenekler")?>">
             <i class="fa fa-sort"></i> <p> Ürün Seçenekleri</p></a>
           </li>
+           <li class="nav-item"><a href="<?php echo base_url('admin/urunler');?>" class="nav-link <?=active("urunler")?>">
+            <i class="fas fa-shopping-bag"></i> <p> Ürünler</p></a>
+          </li>
           <li class="nav-item"><a href="<?php echo base_url('admin/logout');?>"class="nav-link"><i class="fas fa-sign-out-alt"></i> <p> Çıkış Yap</p></a></li>
 
         </ul>

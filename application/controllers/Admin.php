@@ -16,6 +16,17 @@ class Admin extends CI_Controller {
 		if($this->session->userdata('adminlogin')){redirect('admin/panel');}
 		$this->load->view('back/login');
 	}
+	
+
+
+
+
+
+	public function urunler(){
+		$data['head']="Ürünler";
+		
+		$this->load->view('back/urunler/products',$data);
+	}
 	public function login()
 	{
 		$exist=Yonetim::find(['mail'=>postval("email"),
@@ -424,130 +435,130 @@ public function save_kategoriler(){
 			geri();
 		}
 
-			public function update_sub_secenekler($id){
+		public function update_sub_secenekler($id){
 
-				$this->load->library("form_validation");
+			$this->load->library("form_validation");
 
-				$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
+			$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
 
-				$this->form_validation->set_message(
-					array(
-						"required"  => "{field} alanı doldurulmalıdır."
-					)
-				);
+			$this->form_validation->set_message(
+				array(
+					"required"  => "{field} alanı doldurulmalıdır."
+				)
+			);
 
-				$validate = $this->form_validation->run();
+			$validate = $this->form_validation->run();
 
-				if($validate){
-					if (strpos(postval("name"),"-")){
-						mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
-					}else{
-						$exist=AltSecenekler::select(["name"=> postval("name"),"option_id"=>postval("ustid")]);
+			if($validate){
+				if (strpos(postval("name"),"-")){
+					mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
+				}else{
+					$exist=AltSecenekler::select(["name"=> postval("name"),"option_id"=>postval("ustid")]);
 
-						if (!$exist){
+					if (!$exist){
 
-							$update = AltSecenekler::update($id,[ "name" => postval("name")]);
-							if($update){
-								mesaj('success','check','Kayıt başarılı bir şekilde güncellendi.');
-							} else {
-								mesaj('danger','ban','Kayıt Güncelleme sırasında bir problem oluştu.');	
-							}
-
+						$update = AltSecenekler::update($id,[ "name" => postval("name")]);
+						if($update){
+							mesaj('success','check','Kayıt başarılı bir şekilde güncellendi.');
+						} else {
+							mesaj('danger','ban','Kayıt Güncelleme sırasında bir problem oluştu.');	
 						}
-						else{
-							if(postval("name")!=$exist[0]->name){
-								mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
-							}else{
-								mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
-							}
+
+					}
+					else{
+						if(postval("name")!=$exist[0]->name){
+							mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
+						}else{
+							mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
 						}
 					}
+				}
 
 
+			}else{
+				mesaj('danger','ban',validation_errors());		
+			}
+
+			geri();
+		}
+		public function delete_sub_secenekler($id){
+
+			$delete = AltSecenekler::delete(array("id"    => $id));
+			if($delete){
+				mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
+			} else {
+				mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
+			}
+			geri();
+		}
+		public function update_secenekler($id){
+
+			$this->load->library("form_validation");
+
+			$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
+
+			$this->form_validation->set_message(
+				array(
+					"required"  => "{field} alanı doldurulmalıdır."
+				)
+			);
+
+			$validate = $this->form_validation->run();
+
+			if($validate){
+				if (strpos(postval("name"),"-")){
+					mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
 				}else{
-					mesaj('danger','ban',validation_errors());		
-				}
+					$exist=Secenekler::select(["name"=> postval("name")]);
 
-				geri();
-			}
-			public function delete_sub_secenekler($id){
+					if (!$exist){
 
-				$delete = AltSecenekler::delete(array("id"    => $id));
-				if($delete){
-					mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
-				} else {
-					mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
-				}
-				geri();
-			}
-			public function update_secenekler($id){
-
-				$this->load->library("form_validation");
-
-				$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
-
-				$this->form_validation->set_message(
-					array(
-						"required"  => "{field} alanı doldurulmalıdır."
-					)
-				);
-
-				$validate = $this->form_validation->run();
-
-				if($validate){
-					if (strpos(postval("name"),"-")){
-						mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
-					}else{
-						$exist=Secenekler::select(["name"=> postval("name")]);
-
-						if (!$exist){
-
-							$update = Secenekler::update($id,[ "name" => postval("name"),"slug"=>sef(postval("name"))]);
-							if($update){
-								mesaj('success','check','Kayıt başarılı bir şekilde güncellendi.');
-							} else {
-								mesaj('danger','ban','Kayıt Güncelleme sırasında bir problem oluştu.');	
-							}
-
+						$update = Secenekler::update($id,[ "name" => postval("name"),"slug"=>sef(postval("name"))]);
+						if($update){
+							mesaj('success','check','Kayıt başarılı bir şekilde güncellendi.');
+						} else {
+							mesaj('danger','ban','Kayıt Güncelleme sırasında bir problem oluştu.');	
 						}
-						else{
-							if(postval("name")!=$exist[0]->name){
-								mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
-							}else{
-								mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
-							}
+
+					}
+					else{
+						if(postval("name")!=$exist[0]->name){
+							mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
+						}else{
+							mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
 						}
 					}
-				}else{
-					mesaj('danger','ban',validation_errors());		
 				}
-
-				geri();
-			}
-			public function delete_secenekler($id){
-
-				$delete = Secenekler::delete(array("id"    => $id));
-				if($delete){
-					mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
-				} else {
-					mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
-				}
-				geri();
-			}
-			public function find_secenekler(){
-				if(postval("title")!=null){ 
-					$result =Kategoriler::query("select IF(categories.ustmenu = 0, 'Ana Kategori', (select ara.title from categories as ara where ara.id=categories.ustmenu)) as ustname,categories.* from categories where title like'%".postval("title")."%'");
-					if($result)
-						echo json_encode($result);
-					else echo "yok";
-				}
-
-				else echo "bos";
+			}else{
+				mesaj('danger','ban',validation_errors());		
 			}
 
-			public function getAlt_secenekler($ustmenuid=null){
-				$result=AltSecenekler::select(["option_id"=>$ustmenuid],["name"=>"asc"]);
+			geri();
+		}
+		public function delete_secenekler($id){
+
+			$delete = Secenekler::delete(array("id"    => $id));
+			if($delete){
+				mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
+			} else {
+				mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
+			}
+			geri();
+		}
+		public function find_secenekler(){
+			if(postval("title")!=null){ 
+				$result =Kategoriler::query("select IF(categories.ustmenu = 0, 'Ana Kategori', (select ara.title from categories as ara where ara.id=categories.ustmenu)) as ustname,categories.* from categories where title like'%".postval("title")."%'");
 				if($result)
 					echo json_encode($result);
+				else echo "yok";
 			}
+
+			else echo "bos";
 		}
+
+		public function getAlt_secenekler($ustmenuid=null){
+			$result=AltSecenekler::select(["option_id"=>$ustmenuid],["name"=>"asc"]);
+			if($result)
+				echo json_encode($result);
+		}
+	}

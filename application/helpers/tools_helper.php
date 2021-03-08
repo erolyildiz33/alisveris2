@@ -1,14 +1,14 @@
 <?php
 
 function sef($text) {
-    $find = array('Ç', 'Ş', 'Ğ', 'Ü', 'İ', 'Ö', 'ç', 'ş', 'ğ', 'ü', 'ö', 'ı', '+', '#');
-    $replace = array('c', 's', 'g', 'u', 'i', 'o', 'c', 's', 'g', 'u', 'o', 'i', 'plus', 'sharp');
-    $text = strtolower(str_replace($find, $replace, $text));
-    $text = preg_replace("@[^A-Za-z0-9\-_\.\+]@i", ' ', $text);
-    $text = trim(preg_replace('/\s+/', ' ', $text));
-    $text = str_replace(' ', '-', $text);
+	$find = array('Ç', 'Ş', 'Ğ', 'Ü', 'İ', 'Ö', 'ç', 'ş', 'ğ', 'ü', 'ö', 'ı', '+', '#');
+	$replace = array('c', 's', 'g', 'u', 'i', 'o', 'c', 's', 'g', 'u', 'o', 'i', 'plus', 'sharp');
+	$text = strtolower(str_replace($find, $replace, $text));
+	$text = preg_replace("@[^A-Za-z0-9\-_\.\+]@i", ' ', $text);
+	$text = trim(preg_replace('/\s+/', ' ', $text));
+	$text = str_replace(' ', '-', $text);
 
-    return $text;
+	return $text;
 }
 
 function __construct()
@@ -77,4 +77,20 @@ function get_sub_category_title($category_id = 0){
 
 	return $category;
 
+}
+function selectBoxKategori($id = 0, $x = 0) {
+	$ci=&get_instance();
+	$query = $ci->db->where("ustmenu", $id)->get("categories")->result();
+	if ($query) {
+		foreach ($query as $row) {
+                    //Buradaki $x değişkeni str_repeat fonksiyonu ile döngü her çalıştığında hiyerarşik bir düzen oluşturur. $x değişkeni her foreach döngüsünde (+2) artar ve ve arttığı kadar
+                    //boşluk bırakır.
+
+			echo "<option value=".$row->id.">".str_repeat("-", $x).$row->title."</option>";
+
+                    //Eğer ki $query değişkeni bir sonuç dönderirse foreach içerisinde tekrar tekrar aynı fonksiyonu çalıştırıp alt kategorilerinin olup olmadığına bakarız.
+                    //Alt kategori olmadığı durumda if sorgusu çalışmayacağı için döngü sonlanmış olur.
+			selectBoxKategori($row->id, $x + 2);
+		}
+	}
 }
