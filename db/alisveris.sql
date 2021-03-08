@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0-rc1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 08 Mar 2021, 16:03:00
--- Sunucu sürümü: 5.7.27-log
--- PHP Sürümü: 7.4.14
+-- Üretim Zamanı: 09 Mar 2021, 00:41:22
+-- Sunucu sürümü: 5.7.31-log
+-- PHP Sürümü: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -80,7 +80,8 @@ INSERT INTO `categories` (`id`, `ustmenu`, `title`, `rank`, `isActive`, `created
 (32, 29, 'deneme', 0, 1, '2021-03-04 16:58:11'),
 (33, 0, 'yeni-2', 3, 1, '2021-03-05 10:06:27'),
 (34, 32, 'aaa', 0, 1, '2021-03-08 13:21:24'),
-(35, 34, 'asdsad', 0, 1, '2021-03-08 13:21:43');
+(35, 34, 'asdsad', 0, 1, '2021-03-08 13:21:43'),
+(36, 0, 'deneme', 4, 1, '2021-03-08 23:31:18');
 
 -- --------------------------------------------------------
 
@@ -140,17 +141,23 @@ INSERT INTO `options` (`id`, `name`, `slug`) VALUES
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `category` int(254) NOT NULL,
-  `subcategory` int(254) NOT NULL,
   `title` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
   `subtitle` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_turkish_ci NOT NULL,
   `price` float DEFAULT NULL,
   `discount` float DEFAULT NULL,
-  `tag` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `tag` varchar(254) COLLATE utf8mb4_turkish_ci DEFAULT NULL,
   `complete` int(1) NOT NULL DEFAULT '0',
   `active` int(1) NOT NULL DEFAULT '0',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+--
+-- Tablo döküm verisi `products`
+--
+
+INSERT INTO `products` (`id`, `category`, `title`, `subtitle`, `description`, `price`, `discount`, `tag`, `complete`, `active`, `date`) VALUES
+(1, 1, 'ürün adı', 'açıklama', 'uzun açıklama', 30, 20, NULL, 0, 0, '2021-03-08 21:31:23');
 
 -- --------------------------------------------------------
 
@@ -229,7 +236,7 @@ ALTER TABLE `admin`
 -- Tablo için AUTO_INCREMENT değeri `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `config`
@@ -247,7 +254,7 @@ ALTER TABLE `options`
 -- Tablo için AUTO_INCREMENT değeri `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `suboptions`

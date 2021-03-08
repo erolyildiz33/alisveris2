@@ -9,14 +9,14 @@
 				<p>Burada herhangi bir veri bulunmamaktadır. Eklemek için lütfen <span class="text-danger yeniekle"
 					data-altid="0" data-toggle="modal" data-target="#myModal"
 					data-kategoriler="<?php echo selectBoxKategori(); ?>"
-					data-url='<?php echo base_url("admin/save_kategoriler"); ?>'>tıklayınız</span></p>
+					data-url='<?php echo base_url("admin/save_urunler"); ?>'>tıklayınız</span></p>
 				</div>
 			</div>
 		<?php }else{ ?>
 			<div class="col-sm-12">
 				<div class="float-sm-right my-2">
 					<button data-altid="0" data-toggle="modal" data-target="#myModal"
-					data-url='<?php echo base_url("admin/save_kategoriler"); ?>'
+					data-url='<?php echo base_url("admin/save_urunler"); ?>'
 					data-kategoriler="<?php echo selectBoxKategori(); ?>"
 					class="btn btn-outline btn-primary yeniekle btn-xs-block">
 					<i class="fa fa-plus"></i>  Yeni Ekle
@@ -29,53 +29,23 @@
 					<div class="widget p-lg">
 						<table class="table table-responsive table-hover table-striped table-bordered content-container">
 							<thead>
-								<th data-orderable="false" class="order"><i class="fas fa-bars"></i></th>
+
 								<th class="w50">Sıra</th>
-								<th>Üst Kategori</th>
-								<th>Başlık</th>
-								<th>Durumu</th>
-								<th data-orderable="false">Alt Kategori</th>
-								<th data-orderable="false">İşlem</th>
+								<th>Ürün Adı</th>
+								<th>Kategori</th>
+								<th>Ürün Fiyatı</th>
+								<th >İşlem</th>
 							</thead>
-							<tbody class="sortable" data-sirano="0" data-url="<?php echo base_url("admin/rankSetter_kategoriler"); ?>">
+							<tbody>
 
 								<?php $i=1; foreach ($items as $item) { ?>
 
-									<tr id="ord-<?php echo $item->id; ?>">
-										<td class="order"><i class="fas fa-bars"></i></td>
-										<td class="w50 text-center sirano"><?php echo $i++; ?></td>
-										<td><strong>Ana Kategori</strong></td>
-										<td><?php echo $item->title; ?></td>
-										<td class="text-center w100">
-											<input
-											data-url="<?php echo base_url("admin/isActiveSetter_kategoriler/$item->id"); ?>"
-											class="isActive"
-											type="checkbox"
-											data-switchery
-											data-color="#10c469"
-											<?php echo ($item->isActive) ? "checked" : ""; ?>
-											/>
-										</td>
-										<td class="w400 text-center">
-											<div class="d-flex justify-content-center" >
-												<button data-altid="<?=$item->id?>" 
-													type="button" data-toggle="modal" data-target="#myModal"
-													data-title="<?=$item->title?>"
-													data-url='<?php echo base_url("admin/save_sub_kategoriler"); ?>'
+									<tr>
 
-													class="btn btn-sm btn-success btn-outline add-btn altekle">
-													<i class="fa fa-plus"></i><span class="d-none d-sm-inline"> Alt Kategori Ekle</span>
-												</button>
-												<?php if (get_sub_category_title($item->id)) { ?>
-													<button data-altid="<?=$item->id?>" data-getustid="0" style="margin-left: 1rem;"
-														data-title="<?=$item->title?>"
-														data-geturl='<?php echo base_url("admin/"); ?>'
-														class="btn btn-sm btn-warning btn-outline add-btn altgetir">
-														<i class="fa fa-cog"></i><span class="d-none d-sm-inline"> Alt Kategori İşlemleri </span>
-													</button>
-												<?php } ?>
-											</div>
-										</td>
+										<td class="w50 text-center sirano"><?php echo $i++; ?></td>
+										<td><?=$item->title?></td>
+										<td><?=Kategoriler::select(["id"=>$item->category])[0]->title?></td>
+                                        <td><?=($item->discount)?"<del class='text-red'>".$item->price." TL</del> ".$item->discount." TL":$item->price." TL"?></td>
 										<td class="text-center w300" >
 											<div class="d-flex justify-content-center">
 												<button  data-analiste="evet"
