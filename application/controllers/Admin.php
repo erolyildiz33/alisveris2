@@ -151,7 +151,7 @@ public function save_kategoriler(){
 				}
 			}
 			else{
-				mesaj('danger','ban',"Bu Kategoyi Daha Önce Kullanılmış!");	
+				mesaj('danger','ban',"Bu Kategori Daha Önce Kullanılmış!");	
 
 			}	
 		}else{
@@ -261,9 +261,7 @@ public function save_kategoriler(){
 
 		public function secenekler(){
 			$data['head']="Ürün Seçenekleri";
-			$data['items'] = Secenekler::select();
-
-
+			$data['items'] = Secenekler::select([],["name"=>"asc"]);
 			$this->load->view('back/secenekler/options',$data);
 		}
 
@@ -282,45 +280,224 @@ public function save_kategoriler(){
 			$validate = $this->form_validation->run();
 
 			if($validate){
-				$exist=Secenekler::select(["name"=> postval("name")]);
-				if (!$exist){
-					
-					$insert = Secenekler::insert(array(
-						"name"         => postval("name"),
-						
-						"slug"          =>sef(postval("name")),
-					));
-					if($insert){
-						mesaj('success','check','Kayıt başarılı bir şekilde eklendi.');
-					} else {
-						mesaj('danger','ban','Kayıt Ekleme sırasında bir problem oluştu.');	
+
+				if (strpos(postval("name"),"-")){
+
+
+					$items=explode("-",postval("name"));
+					$basari=[];
+					$hata=[];
+					$kayitli=[];
+					foreach ($items as $value) {
+						$exist=Secenekler::select(["name"=> $value]);
+						if (!$exist){
+							$insert = Secenekler::insert(array(
+								"name"         => $value,
+								"slug"          =>sef($value),
+							));
+							if($insert){
+								array_push($basari, $value);
+							} else {
+								array_push($hata, $value);	
+							}
+						}else{
+							array_push($kayitli, $value);	
+						}
+					}
+
+					$sonmesaj=($basari?"Eknenen Kayıtlar : ".implode(", ",$basari):"").
+					($kayitli?"<br>Önceden Kayıtlı Olanlar : ".implode(", ",$kayitli):"").
+					($hata?"<br>Eklenemeyen Kayıtlar : ".implode(", ",$hata):"");
+					mesaj('info','info',$sonmesaj);
+
+
+
+				}else{
+					if (postval("name")!="-"){	
+						$exist=Secenekler::select(["name"=> postval("name")]);
+						if (!$exist){
+							$insert = Secenekler::insert(array(
+								"name"         => postval("name"),
+								"slug"          =>sef(postval("name")),
+							));
+							if($insert){
+								mesaj('success','check','Kayıt başarılı bir şekilde eklendi.');
+							} else {
+								mesaj('danger','ban','Kayıt Ekleme sırasında bir problem oluştu.');	
+							}
+						}
+						else{
+							mesaj('danger','ban',"Bu Seçenek Daha Önce Kullanılmış!");	
+
+						}
+					}else{
+						mesaj('danger','ban',"Boş Kayıt Eklenmedi!");	
 					}
 				}
-				else{
-					mesaj('danger','ban',"Bu Seçenek Daha Önce Kullanılmış!");	
 
-				}	
+				
 			}else{
-				mesaj('danger','ban',validation_errors());	}
+				mesaj('danger','ban',validation_errors());	
+			}
+
+			geri();
+		}
+
+		public function save_sub_secenekler($id){
+
+			$this->load->library("form_validation");
+
+			$this->form_validation->set_rules("name", "Alt Seçenek Adı", "required|trim");
+
+			$this->form_validation->set_message(
+				array(
+					"required"  => "{field} alanı doldurulmalıdır."
+				)
+			);
+
+			$validate = $this->form_validation->run();
+
+			if($validate){
+
+				if (strpos(postval("name"),"-")){
+
+					$items=explode("-",postval("name"));
+					$basari=[];
+					$hata=[];
+					$kayitli=[];
+					foreach ($items as $value) {
+
+						$exist=AltSecenekler::select(["name"=> $value,"option_id"=>postval("altid")]);
+						if (!$exist){
+							$insert = AltSecenekler::insert(array(
+								"name"         => $value,
+								"option_id"    =>sef(postval("altid")),
+							));
+							if($insert){
+								array_push($basari, $value);
+							} else {
+								array_push($hata, $value);	
+							}
+						}else{
+							array_push($kayitli, $value);	
+						}
+					}
+
+					$sonmesaj=($basari?"Eknenen Kayıtlar : ".implode(", ",$basari):"").
+					($kayitli?"<br>Önceden Kayıtlı Olanlar : ".implode(", ",$kayitli):"").
+					($hata?"<br>Eklenemeyen Kayıtlar : ".implode(", ",$hata):"");
+					mesaj('info','info',$sonmesaj);
+
+
+
+				}else{
+
+					if (postval("name")!="-"){	
+						$exist=AltSecenekler::select(["name"=> postval("name"),"option_id"=>postval("altid")]);
+						if (!$exist){
+
+							$insert = AltSecenekler::insert(array(
+								"name"         => postval("name"),							
+								"option_id"		=>postval("altid"),						
+
+							));
+							if($insert){
+								mesaj('success','check','Kayıt başarılı bir şekilde eklendi.');
+							} else {
+								mesaj('danger','ban','Kayıt Ekleme sırasında bir problem oluştu.');	
+							}
+						}
+						else{
+							mesaj('danger','ban',"Bu Seçenek Daha Önce Kullanılmış!");	
+
+						}
+					}else{
+						mesaj('danger','ban',"Boş Kayıt Eklenmedi!");	
+					}
+				}
+
+				
+			}else{
+				mesaj('danger','ban',validation_errors());	
+			}
+
+			geri();
+		}
+
+			public function update_sub_secenekler($id){
+
+				$this->load->library("form_validation");
+
+				$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
+
+				$this->form_validation->set_message(
+					array(
+						"required"  => "{field} alanı doldurulmalıdır."
+					)
+				);
+
+				$validate = $this->form_validation->run();
+
+				if($validate){
+					if (strpos(postval("name"),"-")){
+						mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
+					}else{
+						$exist=AltSecenekler::select(["name"=> postval("name"),"option_id"=>postval("ustid")]);
+
+						if (!$exist){
+
+							$update = AltSecenekler::update($id,[ "name" => postval("name")]);
+							if($update){
+								mesaj('success','check','Kayıt başarılı bir şekilde güncellendi.');
+							} else {
+								mesaj('danger','ban','Kayıt Güncelleme sırasında bir problem oluştu.');	
+							}
+
+						}
+						else{
+							if(postval("name")!=$exist[0]->name){
+								mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
+							}else{
+								mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
+							}
+						}
+					}
+
+
+				}else{
+					mesaj('danger','ban',validation_errors());		
+				}
 
 				geri();
 			}
-		
-		public function update_secenekler($id){
+			public function delete_sub_secenekler($id){
 
-					$this->load->library("form_validation");
+				$delete = AltSecenekler::delete(array("id"    => $id));
+				if($delete){
+					mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
+				} else {
+					mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
+				}
+				geri();
+			}
+			public function update_secenekler($id){
 
-					$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
+				$this->load->library("form_validation");
 
-					$this->form_validation->set_message(
-						array(
-							"required"  => "{field} alanı doldurulmalıdır."
-						)
-					);
+				$this->form_validation->set_rules("name", "Seçenek Adı", "required|trim");
 
-					$validate = $this->form_validation->run();
+				$this->form_validation->set_message(
+					array(
+						"required"  => "{field} alanı doldurulmalıdır."
+					)
+				);
 
-					if($validate){
+				$validate = $this->form_validation->run();
+
+				if($validate){
+					if (strpos(postval("name"),"-")){
+						mesaj('danger','ban','Çoklu Güncelleme Yapamazsınız.');	
+					}else{
 						$exist=Secenekler::select(["name"=> postval("name")]);
 
 						if (!$exist){
@@ -334,131 +511,43 @@ public function save_kategoriler(){
 
 						}
 						else{
-							if(postval("title")!=$exist[0]->title){
+							if(postval("name")!=$exist[0]->name){
 								mesaj('danger','ban',"Bu Seçenek Adı Daha Önce Kullanılmış!");	
 							}else{
 								mesaj('warning','exclamation-triangle',"Bu Seçenekte Değişiklik Yapılmamıştır!");	
 							}
 						}
-					}else{
-						mesaj('danger','ban',validation_errors());		
 					}
-
-					geri();
-		}
-
-public function save_sub_secenekler(){
-
-				$this->load->library("form_validation");
-
-				$this->form_validation->set_rules("title", "Başlık", "required|trim");
-
-				$this->form_validation->set_message(
-					array(
-						"required"  => "{field} alanı doldurulmalıdır."
-					)
-				);
-
-				$validate = $this->form_validation->run();
-
-				if($validate){
-					$exist=Kategoriler::select(["title"=> postval("title"),"ustmenu"=>postval("anamenu")],["rank"=>"desc"],1);
-					if (!$exist){
-						$rank=Kategoriler::select(["ustmenu"=>postval("anamenu")], ["rank"=>"desc"],1);
-						$insert = Kategoriler::insert(array(
-							"title"         => postval("title"),
-							"isActive"      => 1,
-							"ustmenu"		=>postval("anamenu"),
-							"createdAt"     => date("Y-m-d H:i:s"),
-							"rank"          =>$rank?$rank[0]->rank+1:0,
-						));
-						if($insert){
-							mesaj('success','check','Kayıt başarılı bir şekilde eklendi.');
-						} else {
-							mesaj('danger','ban','Kayıt Ekleme sırasında bir problem oluştu.');	
-						}
-					}
-					else{
-						mesaj('danger','ban',"Bu Kategoyi Daha Önce Kullanılmış!");	
-
-					}	
 				}else{
-					mesaj('danger','ban',validation_errors());	}
-
-					geri();
-				}				
-
-public function delete_secenekler($id){
-
-					$delete = Kategoriler::delete(array("id"    => $id));
-					if($delete){
-						mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
-					} else {
-						mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
-					}
-					geri();
+					mesaj('danger','ban',validation_errors());		
 				}
 
-				public function isActiveSetter_secenekler($id){
+				geri();
+			}
+			public function delete_secenekler($id){
 
-					if($id){
-						$isActive = (postval("data") === "true") ? 1 : 0;
-						Kategoriler::update($id,["isActive"  => $isActive]);
-					}
+				$delete = Secenekler::delete(array("id"    => $id));
+				if($delete){
+					mesaj('success','check','Kayıt başarılı bir şekilde silindi.');
+				} else {
+					mesaj('danger','ban','Kayıt silme sırasında bir problem oluştu.');	
 				}
-
-
-				public function find_secenekler(){
-
-					if(postval("title")!=null){ 
-						$result =Kategoriler::query("select IF(categories.ustmenu = 0, 'Ana Kategori', (select ara.title from categories as ara where ara.id=categories.ustmenu)) as ustname,categories.* from categories where title like'%".postval("title")."%'");
-						if($result)
-							echo json_encode($result);
-						else echo "yok";
-					}
-
-					else echo "bos";
-				}
-				public function rankSetter_secenekler(){
-
-
-					$data = postval("data");
-
-					parse_str($data, $order);
-
-					$items = $order["ord"];
-
-					foreach ($items as $rank => $id){
-
-						Kategoriler::update(
-							array(
-								"id"        => $id,
-								"rank !="   => $rank
-							),
-							array(
-								"rank"      => $rank
-							)
-						);
-
-					}
-				}
-				public function getAlt_secenekler($ustmenuid=null){
-					$result=Kategoriler::select(["ustmenu"=>$ustmenuid], ["rank"=>"ASC"]);
+				geri();
+			}
+			public function find_secenekler(){
+				if(postval("title")!=null){ 
+					$result =Kategoriler::query("select IF(categories.ustmenu = 0, 'Ana Kategori', (select ara.title from categories as ara where ara.id=categories.ustmenu)) as ustname,categories.* from categories where title like'%".postval("title")."%'");
 					if($result)
 						echo json_encode($result);
+					else echo "yok";
 				}
 
-
-
-
-
-
-
-
-
-				public function save_options(){
-
-
-				}
-
+				else echo "bos";
 			}
+
+			public function getAlt_secenekler($ustmenuid=null){
+				$result=AltSecenekler::select(["option_id"=>$ustmenuid],["name"=>"asc"]);
+				if($result)
+					echo json_encode($result);
+			}
+		}

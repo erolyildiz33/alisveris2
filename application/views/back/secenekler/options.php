@@ -26,14 +26,14 @@
 <div class="col-md-12 ">
 	<div class="card">
 		<div class="card-body">
-			<div class="widget p-lg">
-				<table class="table table-responsive table-hover table-striped table-bordered content-container">
+			<div class="widget p-lg">				
+				<table class="table table-responsive table-hover table-striped table-bordered content-container dataTable">
 					<thead>
 						
-						<th class="w50">Sıra</th>
+						<th class="w50" >Sıra</th>
 						<th>Seçenek Adı</th>
 						<th>Seçenek Sayısı</th>
-						<th>İşlem</th>
+						<th >İşlem</th>
 					</thead>
 					<tbody>
 
@@ -43,20 +43,29 @@
 							
 								<td class="w50 text-center"><?php echo $i++; ?></td>
 								<td><?=$item->name?></td>
-								<td><?php echo Secenekler::count(); ?></td>
+								<td class="text-center"><?php echo AltSecenekler::count(['option_id'=>$item->id]); ?></td>
 								<td class="text-center w300" >
 									<div class="d-flex justify-content-center">
 										<button 
-										data-url="<?php echo base_url("admin/delete/$item->id"); ?>"
-										class="btn btn-sm btn-danger btn-outline remove-btn " >
-										<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil </span>
-									</button>
+										data-geturl="<?php echo base_url("admin/"); ?>"
+										data-altid="<?=$item->id?>"
+										data-title="<?=$item->name?>"
+										class="btn btn-sm btn-success btn-outline altgetir">
+										<i class="far fa-circle"></i><span class="d-none d-sm-inline"> Alt Seçenekler </span>
+									
 									<button data-altid="<?=$item->id?>" style="margin-left: 1rem;"
 										type="button" data-toggle="modal" data-target="#myModal"
 										data-title="<?=$item->name?>"
+										data-ustmenu="0"
 										data-url='<?php echo base_url("admin/update_secenekler/").$item->id; ?>'
-										class="btn btn-sm btn-info btn-outline altguncelle ">
+										class="btn btn-sm btn-info btn-outline altguncelle " >
 										<i class="fas fa-edit"></i><span class="d-none d-sm-inline">Düzenle</span>
+										</button>
+										<button 
+										data-url="<?php echo base_url("admin/delete_secenekler/$item->id"); ?>" style="margin-left: 1rem;"
+										class="btn btn-sm btn-danger btn-outline remove-btn " data-analiste="evet">
+										<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil </span>
+									</button>
 									</button>
 								</div>
 							</td>
@@ -111,7 +120,7 @@
 	</div>
 </div>
 </div>
-<
+
 <style type="text/css">
 	body.modal-open .background-container{
 

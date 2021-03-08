@@ -31,13 +31,13 @@
 					<div class="widget p-lg">
 						<table class="table table-responsive table-hover table-striped table-bordered content-container">
 							<thead>
-								<th class="order"><i class="fas fa-bars"></i></th>
+								<th data-orderable="false" class="order"><i class="fas fa-bars"></i></th>
 								<th class="w50">Sıra</th>
 								<th>Üst Kategori</th>
 								<th>Başlık</th>
 								<th>Durumu</th>
-								<th>Alt Kategori</th>
-								<th>İşlem</th>
+								<th data-orderable="false">Alt Kategori</th>
+								<th data-orderable="false">İşlem</th>
 							</thead>
 							<tbody class="sortable" data-sirano="0" data-url="<?php echo base_url("admin/rankSetter_kategoriler"); ?>">
 
