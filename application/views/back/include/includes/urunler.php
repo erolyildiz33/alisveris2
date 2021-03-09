@@ -181,8 +181,6 @@
         });
         $(".selectpicker").selectpicker({noneSelectedText: 'Kategori Seçiniz'});
     });
-
-
     $(document).on('click', '.resimekle', function () {
 
         let url = $(this).data("url");
@@ -292,11 +290,44 @@
 
     });
     $(document).on('click', '.stokekle', function () {
-        var url = $(this).data("url");
+        let url = $(this).data("url");
+        let urunid = $(this).data("urunid");
+        let urunadi = $(this).data("urunadi");
+        let secenekler = $(this).data("secenekler");
+        if(!$(".modal-dialog").hasClass("modal-lg"))$(".modal-dialog").addClass("modal-lg");
+        $("#myModalLabel").html('<h2 class="modal-title"><b>' + urunadi + '</b> Ürününe Seçenek ve Stok Ekleme</h2>');
+        $("#modalform").attr("action", url);
 
 
+        let ekle = '<div class="row">' +
+            '<div class="col-md-12">' +
+            '<div class="widget">' +
+            '<div class="widget-body">' +
+            '<div class="form-group">' +
+            '<div class="form-label-group in-border">' +
+            '<select class="tags  form-control" multiple="multiple" name="tag" id="tag" style="width: 100%">' +
+            secenekler+
+            '</select>' +
+            '<label for="tag">Etiket</label>' +
+            '</div></div>' +
+
+            '</div>' +
+
+
+            '</div></div></div></div>';
+        let footer = '<button type="submit" id="yukle" class="btn btn-primary">Kaydet</button>' +
+            '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
+        $("#modalfooter").html(footer);
+        $("#modalbody").html(ekle);
+        $('.tags').select2({
+            placeholder: 'Tag Seçiniz',allowClear: true
+
+
+        });
     });
-
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        $(".modal-dialog").removeClass("modal-lg");
+    })
     function serializeet() {
         fields = $(".tags").serializeArray()
         var result = [];
@@ -305,7 +336,6 @@
         });
         $("#taglar").val(result);
     }
-
     $(document).on('click', '.altguncelle', function () {
         var title = $(this).data("title");
         var altid = $(this).data("altid");

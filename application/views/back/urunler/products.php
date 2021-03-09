@@ -51,6 +51,7 @@
 											<div class="d-flex justify-content-center">
 												<?php if ($item->complete!=2) { ?> 
 													<button type="button" data-analiste="evet"
+                                                            data-secenekler="<?php echo selectBoxSecenekler(); ?>"
 													data-toggle="modal" data-target="#myModal"
 													data-urunid="<?=$item->id?>"
 													data-urunadi="<?=$item->title?>"

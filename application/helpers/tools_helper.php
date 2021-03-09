@@ -98,4 +98,18 @@ function selectBoxKategori($id = 0, $x = 0) {
 			selectBoxKategori($row->id, $x + 2);
 		}
 	}
+}function selectBoxSecenekler($id = 0, $x = 0) {
+	$ci=&get_instance();
+	$query = Secenekler::select();
+	if ($query) {
+		foreach ($query as $row) {
+                    //Buradaki $x değişkeni str_repeat fonksiyonu ile döngü her çalıştığında hiyerarşik bir düzen oluşturur. $x değişkeni her foreach döngüsünde (+2) artar ve ve arttığı kadar
+                    //boşluk bırakır.
+
+			echo "<option value=".$row->id.">".$row->name."</option>";
+
+
+
+		}
+	}
 }
