@@ -34,6 +34,7 @@
 								<th>Ürün Adı</th>
 								<th>Kategori</th>
 								<th>Ürün Fiyatı</th>
+								<th>Aşama</th>
 								<th >İşlem</th>
 							</thead>
 							<tbody>
@@ -45,7 +46,33 @@
 										<td class="w50 text-center sirano"><?php echo $i++; ?></td>
 										<td><?=$item->title?></td>
 										<td><?=Kategoriler::select(["id"=>$item->category])[0]->title?></td>
-                                        <td><?=($item->discount)?"<del class='text-red'>".$item->price." TL</del> ".$item->discount." TL":$item->price." TL"?></td>
+										<td><?=($item->discount)?"<del class='text-red'>".$item->price." TL</del> ".$item->discount." TL":$item->price." TL"?></td>
+										<td>
+											<div class="d-flex justify-content-center">
+												<?php if ($item->complete!=2) { ?> 
+													<button type="button" data-analiste="evet"
+													data-toggle="modal" data-target="#myModal"
+													data-urunid="<?=$item->id?>"
+													data-urunadi="<?=$item->title?>"
+													data-url="<?=(($item->complete==0)?base_url("admin/resimekle_urunler/$item->id"):(
+													($item->complete==1)?base_url("admin/stokekle_urunler/$item->id"):""))?>"
+													class="btn btn-sm btn-primary btn-outline <?=(($item->complete==0)?"resimekle":(($item->complete==1)?"stokekle":""))?>">
+													<i class="<?=(($item->complete==0)?"fas fa-image":(
+													($item->complete==1)?"fas fa-cog":""))?>"></i>
+													<span class="d-none d-sm-inline px-1">
+														<?=(($item->complete==0)?" Resim Ekle":(
+															($item->complete==1)?" Stok Ekle":""))?> 
+														</span>
+													</button>
+												<?php } if ($item->complete==2) { ?>
+													<i class="fas fa-check-double"></i><span class="d-none d-sm-inline px-1">
+														Ürün Hazır
+													</span>
+
+												<?php	} ?>
+
+											</div>
+										</td>
 										<td class="text-center w300" >
 											<div class="d-flex justify-content-center">
 												<button  data-analiste="evet"

@@ -46,7 +46,12 @@ function imageupload($filename,$path,$allowed){
 	
 	
 }
-
+function isPost(){
+	if($_SERVER['REQUEST_METHOD']=="POST")
+	{
+		return true;
+	}
+}
 
 function geri(){
 	return redirect($_SERVER['HTTP_REFERER']);

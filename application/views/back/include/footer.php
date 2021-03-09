@@ -25,6 +25,7 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
 <script src="<?php echo base_url();?>/assets/back/plugins/jquery/jquery.min.js"></script>
+<script src="<?php echo base_url();?>/assets/back/dist/js/jquery-3.6.0.slim.min.js"></script>
 <!-- Bootstrap -->
 <script src="<?php echo base_url();?>/assets/back/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
@@ -50,6 +51,7 @@
 <script src="<?php echo base_url(); ?>assets/back/build/js/iziToast.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/back/build/switchery/dist/switchery.min.js"></script>
 <script src="<?php echo base_url();?>assets/back/build/js/custom.js"></script>
+
 <?php 
 if (is_file(APPPATH.'views/' . 'back/include/includes/'.$this->uri->segment(2) . EXT))
 {

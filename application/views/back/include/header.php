@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="<?php echo base_url();?>/assets/back/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url();?>/assets/back/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<?php echo base_url();?>/assets/back/dist/css/floating-labels.css">
   <link rel="stylesheet" href="<?php echo base_url("assets"); ?>/back/build/css/iziToast.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/back/build/switchery/dist/switchery.min.css">
 </head>
