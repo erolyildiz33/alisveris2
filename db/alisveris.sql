@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 09 Mar 2021, 00:41:22
+-- Üretim Zamanı: 09 Mar 2021, 23:44:56
 -- Sunucu sürümü: 5.7.31-log
 -- PHP Sürümü: 7.4.12
 
@@ -112,6 +112,29 @@ INSERT INTO `config` (`id`, `title`, `logo`, `icon`, `info`, `mail`, `facebook`,
 -- --------------------------------------------------------
 
 --
+-- Tablo için tablo yapısı `images`
+--
+
+CREATE TABLE `images` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `path` varchar(255) COLLATE utf8mb4_turkish_ci NOT NULL,
+  `master` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+--
+-- Tablo döküm verisi `images`
+--
+
+INSERT INTO `images` (`id`, `product_id`, `path`, `master`) VALUES
+(1, 1, 'assets/upload/products/prod-12.jpg', 0),
+(2, 1, 'assets/upload/products/prod-21.jpg', 0),
+(3, 1, 'assets/upload/products/prod-22.jpg', 0),
+(4, 1, 'assets/upload/products/prod-3.jpg', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Tablo için tablo yapısı `options`
 --
 
@@ -157,7 +180,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category`, `title`, `subtitle`, `description`, `price`, `discount`, `tag`, `complete`, `active`, `date`) VALUES
-(1, 1, 'ürün adı', 'açıklama', 'uzun açıklama', 30, 20, NULL, 0, 0, '2021-03-08 21:31:23');
+(1, 1, 'ürün adı', 'açıklama', 'uzun açıklama', 30, 20, NULL, 1, 0, '2021-03-08 21:31:23');
 
 -- --------------------------------------------------------
 
@@ -205,6 +228,12 @@ ALTER TABLE `config`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Tablo için indeksler `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Tablo için indeksler `options`
 --
 ALTER TABLE `options`
@@ -243,6 +272,12 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `config`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Tablo için AUTO_INCREMENT değeri `images`
+--
+ALTER TABLE `images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `options`
