@@ -63,6 +63,7 @@
 												<button data-altid="<?=$item->id?>" 
 													type="button" data-toggle="modal" data-target="#myModal"
 													data-title="<?=$item->title?>"
+													data-ustmenu="0"
 													data-url='<?php echo base_url("admin/save_sub_kategoriler"); ?>'
 
 													class="btn btn-sm btn-success btn-outline add-btn altekle">

@@ -25,7 +25,7 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
 <script src="<?php echo base_url();?>/assets/back/plugins/jquery/jquery.min.js"></script>
-<script src="<?php echo base_url();?>/assets/back/dist/js/jquery-3.6.0.slim.min.js"></script>
+
 <!-- Bootstrap -->
 <script src="<?php echo base_url();?>/assets/back/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->

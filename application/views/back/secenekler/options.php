@@ -6,7 +6,7 @@
 		<div class="mx-auto">
 			<div class="alert alert-info text-center ">
 				<p>Burada herhangi bir veri bulunmamaktadır. Eklemek için lütfen <span class="text-danger yeniekle"
-					data-altid="0" data-toggle="modal" data-target="#myModal"
+					data-altid="0" data-toggle="modal" data-target="#myModal" data-ustmenu="0"
 					data-url='<?php echo base_url("admin/save_secenekler"); ?>'>tıklayınız</span></p>
 				</div>
 			</div>
@@ -16,7 +16,7 @@
 
 	<div class="col-sm-12">
 		<div class="float-sm-right my-2">
-			<button data-altid="0" data-toggle="modal" data-target="#myModal"
+			<button data-altid="0" data-toggle="modal" data-target="#myModal" data-ustmenu="0"
 			data-url='<?php echo base_url("admin/save_secenekler"); ?>'
 			class="btn btn-outline btn-primary  btn-xs-block yeniekle">
 			<i class="fa fa-plus"></i>  Yeni Ekle
@@ -50,7 +50,7 @@
 										data-geturl="<?php echo base_url("admin/"); ?>"
 										data-altid="<?=$item->id?>"
 										data-title="<?=$item->name?>"
-										class="btn btn-sm btn-success btn-outline altgetir">
+                                        class="btn btn-sm btn-success btn-outline altgetir">
 										<i class="far fa-circle"></i><span class="d-none d-sm-inline"> Alt Seçenekler </span>
 									
 									<button data-altid="<?=$item->id?>" style="margin-left: 1rem;"
