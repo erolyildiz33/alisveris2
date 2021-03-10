@@ -106,7 +106,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
         });
     });
      var say=0;
-     var say2=0;
+
      $.each( myarr, function( key, val ) {
 
        if(say==3) say=0; 
@@ -357,7 +357,7 @@ $(document).on('click', '.stokekle', function () {
     '<div id="stoklar" class="col-md-12 mt-3">'+
     '</div>'+
     '</div>';
-    let footer = '<button type="submit" disabled="true"  id="stokkaydet" id="yukle" class="btn btn-primary">Kaydet</button>' +
+    let footer = '<button type="submit" disabled="true"  id="yukle" class="btn btn-primary">Kaydet</button>' +
     '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
     $("#modalfooter").html(footer);
     $("#modalbody").html(ekle);
@@ -392,16 +392,29 @@ $(document).on('click', '.stokekle', function () {
             this.qs1.cache();
             this.qs2.cache();
 
-            if($("#my-select").val().length>0) $("#stoktanit").prop("disabled",false);else $("#stoktanit").prop("disabled",true);
+            if($("#my-select").val().length>0) {
+                $("#stoktanit").prop("disabled",false);
+                $("#yukle").prop("disabled",false);
+            }else{ 
+                $("#stoktanit").prop("disabled",true);
+                $("#yukle").prop("disabled",true);
+            }
 
         },
         afterDeselect: function (value) {
             this.qs1.cache();
             this.qs2.cache();
 
-            if($("#my-select").val().length>0) $("#stoktanit").prop("disabled",false);else $("#stoktanit").prop("disabled",true);
+            if($("#my-select").val().length>0) {
+                $("#stoktanit").prop("disabled",false);
+                $("#yukle").prop("disabled",false);
+            }else{ 
+                $("#stoktanit").prop("disabled",true);
+                $("#yukle").prop("disabled",true);
+                
 
 
+            }
         }
     });
     $('.tags').select2({
