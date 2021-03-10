@@ -52,6 +52,7 @@
 												<?php if ($item->complete!=2) { ?> 
 													<button type="button" data-analiste="evet"
                                                             data-secenekler="<?php echo selectBoxSecenekler(); ?>"
+                                                            data-seceneklerli="<?php echo listBoxSecenekler(); ?>"
 													data-toggle="modal" data-target="#myModal"
 													data-urunid="<?=$item->id?>"
 													data-urunadi="<?=$item->title?>"
