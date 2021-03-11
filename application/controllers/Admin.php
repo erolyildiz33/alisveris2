@@ -44,7 +44,9 @@ class Admin extends CI_Controller
 	}
 
 	public function get_name_secenek($id){
-		echo Secenekler::find($id)->name;
+        $suboption=AltSecenekler::find($id);
+	    $option=Secenekler::find($suboption->option_id);
+	    echo json_encode(["id"=>$suboption->id,"name"=>$suboption->name,"ustid"=>$option->id,"ustname"=>$option->name]);
 	}
 	public function stokekle_urunler($id){
 		$viewData = new stdClass();

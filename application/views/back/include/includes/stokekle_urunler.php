@@ -65,10 +65,10 @@
 
 <link rel="stylesheet" href="<?= base_url('assets/back') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
-href="<?= base_url('assets/back') ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+      href="<?= base_url('assets/back') ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="<?= base_url('assets/back') ?>/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 <link href="<?= base_url('assets/back') ?>/dist/css/select2.min.css" rel="stylesheet"/>
 <link href="<?= base_url('assets/back') ?>/dist/dropzone.css" rel="stylesheet"/>
 <link href="<?= base_url('assets/back') ?>/build/css/multi-select.css" rel="stylesheet"/>
@@ -95,97 +95,94 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
 <script type="text/javascript">
 
 
-   function stokgir(id,type,name) {
+    function stokgir(option, type) {
+        let rowindis = Math.floor($("#altliste").children().length / 3);
+        let rowsayisi=$("#altliste").children().length % 3;
+        let satirsay = $("#satir_" + rowindis).children().length;
+        let satirindis = $("#satir_" + rowindis).children().length%3;
 
-    let length= $('.ms-selection ul li.ms-selected').children().length;
-    let icerik=$("#stoklar").html();
-    if (type=="ekle"){
-        if(length%3==1) {
-            icerik+='<div class="row" id="satir_'+length+'">';
+        if (type == "ekle") {
+            if ((satirsay == 0 && satirindis == 0)||(satirsay == 3 && satirindis == 0)) {
+                $("#altliste").append('<div class="row" id="satir_' + rowindis + '">');
+            }
+            if (satirindis < 3)
+                $("#satir_" + rowindis).append('<div class="col-md-4" id="eklenen_'+ option.id+'">' +
+                    '<div class="form-group">' +
+                    '<div class="form-label-group in-border">' +
+                    '<input class="form-control"  name="secenek_' + option.id + '" id="secenek_' + option.id + '" autocomplete="off">' +
+                    '<input type="hidden" name="urunid" id="urunid" value="'+$("#urunid").val()+'">' +
+                    '<label for="secenek_' + option.id + '">' + option.name + ' için Stok Miktarı</label>' +
+                    '</div>' +
+                    '</div>');
+            console.log(satirsay,satirindis,rowsayisi,rowindis);
+            if (satirsay == 2 && satirindis == 0)  $("#satir_" +rowindis).append('</div>');
+
+
+            // $("#altliste").html(anaicerik);
+
         }
-        icerik+= '<div class="col-md-4" id="eklenen_'+id+'">'+
-        '<div class="form-group">' +
-        '<div class="form-label-group in-border">' +
-        '<input class="form-control"  name="secenek_'+id+'" id="secenek_'+id+'" autocomplete="off">' +
-        '<label for="secenek_'+id+'">'+name+' için Stok Miktarı</label>' +
-        '</div>' +
-        '</div>';
+        if (type == "sil") {
+            $("#eklenen_" + option.id).remove();
+            if ($("#altliste").children().length % 3 == 0) $("#satir_" + rowindis).remove();
 
-        if(length%3==0) icerik+='</div>';
+        }
 
+    };
 
+    $('.searchable').multiSelect({
 
+        selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+        selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+        afterInit: function (ms) {
 
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function (e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
 
-        $("#stoklar").html(icerik);
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function (e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function (value) {
 
-    }
-    if(type=="sil"){
-        $("#eklenen_"+id).remove();
-        if(length%3==0) $("#satir_"+length).remove();
-    }
+            this.qs1.cache();
+            this.qs2.cache();
+            var option = $.parseJSON(AjaxGet($("#homepage").val() + 'admin/get_name_secenek/' + value));
+            option.list = $("#option" + option.ustid).val();
 
-};
+            stokgir(option, "ekle");
 
-$('.searchable').multiSelect({
-
-    selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-    selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-    afterInit: function (ms) {
-
-        var that = this,
-        $selectableSearch = that.$selectableUl.prev(),
-        $selectionSearch = that.$selectionUl.prev(),
-        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-        that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-        .on('keydown', function (e) {
-            if (e.which === 40) {
-                that.$selectableUl.focus();
-                return false;
-            }
-        });
-
-        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-        .on('keydown', function (e) {
-            if (e.which == 40) {
-                that.$selectionUl.focus();
-                return false;
-            }
-        });
-    },
-    afterSelect: function (value) {
-     var optionid=$(this);
-     this.qs1.cache();
-     this.qs2.cache();
-
-     console.log(this.qs1.html());
-     console.log(this.qs2.html());
-
-                //var name=AjaxGet(homepage+'admin/get_name_secenek/'+value);
-
-               // stokgir(value,"ekle",name) ;
-
-           },
-           afterDeselect: function (value) {
-               let optionid=this.$selectionUl;
-               this.qs1.cache();
-               this.qs2.cache();
-                console.log(optionid);
+        },
+        afterDeselect: function (value) {
+            this.qs1.cache();
+            this.qs2.cache();
+            var option = $.parseJSON(AjaxGet($("#homepage").val() + 'admin/get_name_secenek/' + value));
+            option.list = $("#option" + option.ustid).val();
+            stokgir(option, "sil");
 
 
-                //var name=AjaxGet(homepage+'admin/get_name_secenek/'+value);
-               // stokgir(value,"sil",name);
-           }
-       });
+        }
+    });
 
 
-$('.tags').select2({
-    placeholder: 'Tag Seçiniz', allowClear: true
+    $('.tags').select2({
+        placeholder: 'Tag Seçiniz', allowClear: true
 
 
-});
+    });
 
 </script>
