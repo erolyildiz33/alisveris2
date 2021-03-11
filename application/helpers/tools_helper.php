@@ -67,10 +67,10 @@ function mesaj($type, $icon, $title, $content = null)
 {
     $ci =& get_instance();
     $mesaj = '<div class="alert alert-' . $type . ' alert-dismissible">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-	<h5><i class="icon fas fa-' . $icon . '"></i> ' . $title . '</h5>
-	' . $content . '
-	</div>';
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h5><i class="icon fas fa-' . $icon . '"></i> ' . $title . '</h5>
+    ' . $content . '
+    </div>';
     $ci->session->set_flashdata('flashmessage', $mesaj);
 }
 
@@ -119,14 +119,25 @@ function selectBoxSecenekler($id = 0, $x = 0)
     $query = Secenekler::select();
     if ($query) {
         foreach ($query as $row) {
-            //Buradaki $x değişkeni str_repeat fonksiyonu ile döngü her çalıştığında hiyerarşik bir düzen oluşturur. $x değişkeni her foreach döngüsünde (+2) artar ve ve arttığı kadar
-            //boşluk bırakır.
+            if (AltSecenekler::select(["option_id"=>$row->id]))     
 
-            echo "<option value=" . $row->id . ">" . $row->name . "</option>";
+                echo "<option value=" . $row->id . ">" . $row->name . "</option>";
 
 
         }
     }
+}
+
+function selectBoxAltSecenekler($sec,$id = 0, $x = 0)
+{
+    $ci =& get_instance();
+    $alt=AltSecenekler::select(["option_id"=>$sec]);
+    if ($alt)
+    foreach ($alt as $row) {
+        echo "<option data-option='".$sec."' value=" . $row->id . ">" . $row->name . "</option>"; 
+    }     
+
+        
 }
 
 function listBoxSecenekler($id = 0, $x = 0)
@@ -135,7 +146,7 @@ function listBoxSecenekler($id = 0, $x = 0)
     $query = Secenekler::select();
     if ($query) {
         foreach ($query as $row) {
-            echo "<li class='list-group-item' value=" . $row->id . ">" . $row->name . "</li>";
-        }
-    }
+         if (AltSecenekler::select(["option_id"=>$row->id])) echo "<li class='list-group-item' value=" . $row->id . ">" . $row->name . "</li>";
+     }
+ }
 }

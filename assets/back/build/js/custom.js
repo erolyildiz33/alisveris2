@@ -34,7 +34,6 @@ AjaxPost = function (url, postdata) {
         data: postdata,
         async: false,
         success: function (data) {
-
         }
     }).responseText;
     return result;

@@ -43,19 +43,42 @@ class Admin extends CI_Controller
 		geri();
 	}
 
+	public function get_name_secenek($id){
+		echo Secenekler::find($id)->name;
+	}
+	public function stokekle_urunler($id){
+		$viewData = new stdClass();
+		$secenekler=new stdClass();		
+		$viewData->head = "Stok Ekle";
+		$viewData->urun = Urunler::find($id);
+		$list=explode(",", $viewData->urun->options);
+		$tumsecenekler=[];
+		foreach ($list as $key => $value) {
+			$secenek=Secenekler::find($value);
+			$altsecenekler=AltSecenekler::select(["option_id"=>$secenek->id]);
+			array_push($tumsecenekler, ["id"=>$secenek->id,"name"=>$secenek->name,'alt'=>$altsecenekler]);
+		}
+		$secenekler=$tumsecenekler;		
+		$viewData->secenekler = $secenekler;
+		$this->load->view('back/urunler/stock', $viewData);
 
-
+	}
 
 
 	public function save_urunler()
 	{
+
+
 		$data = ["category" => postval("category"),
 		"title"=> postval("title"),
 		"description"=> postval("description"),
 		"price"=> postval("price"),
+		"options"=> postval("options")?implode(",",postval("options")):"",
 	];
+
+
 	if(postval("discount")) $data["discount"]=postval("discount");
-	if(postval("taglar")) $data["tag"]=postval("taglar");
+	if(postval("tag")) $data["tag"]=implode(",",postval("tag"));
 	if(postval("subtitle")) $data["subtitle"]=postval("subtitle");
 
 
@@ -65,6 +88,7 @@ class Admin extends CI_Controller
 	$this->form_validation->set_rules("category", "Ürün Kategori", "required|trim");
 	$this->form_validation->set_rules("description", "Ürün Uzun Açıklaması", "required|trim");
 	$this->form_validation->set_rules("price", "Ürün Fiyat", "required|trim");
+	$this->form_validation->set_rules("options[]", "Ürün Seçeneği", "required|trim");
 
 	$this->form_validation->set_message(
 		array(

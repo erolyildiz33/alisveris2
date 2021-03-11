@@ -94,78 +94,47 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
 <script src="<?= base_url('assets/back') ?>/build/js/jquery.quicksearch.js"></script>
 
 <script type="text/javascript">
-    $(document).on('click', '.stoktanimla', function () {
-     let html= $('.ms-selection ul li.ms-selected').children();
-     var myarr=[];
-     var icerik="";
-
-     html.each(function(idx, val){
-        var sonuc=$(this).html();
-        myarr.push({id:$("#my-select").val()[idx],
-            value:sonuc
-        });
-    });
-     var say=0;
-
-     $.each( myarr, function( key, val ) {
-
-       if(say==3) say=0; 
-
-       if(say==0) icerik+='<div class="row">';
-
-
-       icerik+= '<div class="col-md-4">'+
-       '<div class="form-group">' +
-       '<div class="form-label-group in-border">' +
-       '<input class="form-control"  name="secenek_'+val.id+'" id="secenek_'+val.id+'" autocomplete="off">' +
-       '<label for="secenek_'+val.id+'">'+val.value+' için Stok Miktarı</label>' +
-       '</div>' +
-       '</div>' +
-       '</div>';
-
-       if(say==2) icerik+='</div>';
-
-       say++;
-   });
 
 
 
-     $("#stoklar").html(icerik);
+    function stokgir(id,type,name) {
+
+        let length= $('.ms-selection ul li.ms-selected').children().length;
+        let icerik=$("#stoklar").html();
+        if (type=="ekle"){
+            if(length%3==1) {
+                icerik+='<div class="row" id="satir_'+length+'">';
+            }
+            icerik+= '<div class="col-md-4" id="eklenen_'+id+'">'+
+            '<div class="form-group">' +
+            '<div class="form-label-group in-border">' +
+            '<input class="form-control"  name="secenek_'+id+'" id="secenek_'+id+'" autocomplete="off">' +
+            '<label for="secenek_'+id+'">'+name+' için Stok Miktarı</label>' +
+            '</div>' +
+            '</div>';
+
+            if(length%3==0) icerik+='</div>';
 
 
 
- });
-    $(document).on('click', '.altekle', function () {
-        var title = $(this).data("title");
-        var altid = $(this).data("altid");
-        var url = $(this).data("url");
-        $("#myModalLabel").html('<h4 class="modal-title"><b>' + title + '</b> Kategorisine Alt Kategorisi Ekle</h4>');
-        $("#modalform").attr("action", url);
-        var ekle = '<div class="row">' +
-        '<div class="col-md-12">' +
-        '<div class="widget">' +
-        '<div class="widget-body">' +
-        '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
-        '<input type="hidden" name="anamenu" value="' + altid + '">' +
-        '<div class="form-group">' +
-
-        '<div class="form-label-group in-border">' +
-        '<input class="form-control" id="title" placeholder="Alt Kategori Adı"  name="title" autocomplete="off">' +
-        '<label for="title">Alt Kategori Adı</label>' +
-        '</div>' +
 
 
-        '</div>' +
-        '</div></div></div></div>';
-        var footer = '<button type="submit" class="btn btn-primary">Güncelle</button>' +
-        '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
-        $("#modalfooter").html(footer);
-        $("#modalbody").html(ekle);
-    });
+
+            $("#stoklar").html(icerik);
+
+        }
+        if(type=="sil"){
+            $("#eklenen_"+id).remove();
+            if(length%3==0) $("#satir_"+length).remove();
+        }
+
+    };
+
     $(document).on('click', '.yeniekle', function () {
 
         var url = $(this).data("url");
         let kategoriler = $(this).data("kategoriler");
+        let secenekler = $(this).data("secenekler");
         $("#myModalLabel").html('<h2 class="modal-title"><b>Yeni</b> Ürün Ekle</h2>');
         $("#modalform").attr("action", url);
         var ekle = '<div class="row">' +
@@ -173,19 +142,24 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
         '<div class="widget">' +
         '<div class="widget-body">' +
         '<input type="hidden" name="csrf_test_name" value="' + $("#csrf_test_name").data("csrf") + '">' +
-        '<input type="hidden" name="taglar" value="" id="taglar">' +
+
+        
+        '<div class="form-group">' +
+        '<div class="form-label-group in-border">' +
+        '<input class="form-control" placeholder="Ürün Adı" name="title" id="title" autocomplete="off">' +
+        '<label for="title">Ürün Adı</label>' +
+        '</div></div>' +
         '<div class="form-group">' +
         ' <select class="form-control selectpicker" data-live-search="true" data-width="100%" data-style="btn-primary" name="category" id="category" >' +
         '<option value="" selected disabled hidden></option>' + kategoriler +
         '</select></div>' +
         '<div class="form-group">' +
-
         '<div class="form-label-group in-border">' +
-        '<input class="form-control" placeholder="Ürün Adı" name="title" id="title" autocomplete="off">' +
-        '<label for="title">Ürün Adı</label>' +
-        '</div>' +
-        '</div>' +
-
+        '<select class="form-control" multiple="multiple" name="options[]" id="options" style="width: 100%">'+
+        secenekler
+        +'</select>' +
+        '<label for="options">Ürün Seçeneği</label>' +
+        '</div></div>' +
         '<div class="form-group">' +
         '<div class="form-label-group in-border">' +
         '<input type="number" step="any" class="form-control" placeholder="Ürün Fiyatı" name="price" id="price" autocomplete="off">' +
@@ -198,7 +172,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
         '</div></div>' +
         '<div class="form-group">' +
         '<div class="form-label-group in-border">' +
-        '<select class="tags  form-control" multiple="multiple" name="tag" id="tag" style="width: 100%"></select>' +
+        '<select class="tags  form-control" multiple="multiple" name="tag[]" id="tag" style="width: 100%"></select>' +
         '<label for="tag">Etiket</label>' +
         '</div></div>' +
         '</div>' +
@@ -216,7 +190,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
         '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
         $("#modalfooter").html(footer);
         $("#modalbody").html(ekle);
-
+        $("#options").select2();
         $('.tags').select2({
             placeholder: 'Tag Seçiniz',
             tags: true,
@@ -229,6 +203,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
         let url = $(this).data("url");
         let urunid = $(this).data("urunid");
         let urunadi = $(this).data("urunadi");
+        if (!$(".modal-dialog").hasClass("modal-lg")) $(".modal-dialog").addClass("modal-lg");
         $("#myModalLabel").html('<h2 class="modal-title"><b>' + urunadi + '</b> Ürününe Resim Ekle</h2>');
         $("#modalform").attr("action", url);
         $("#modalform").attr("enctype", 'multipart/form-data');
@@ -276,167 +251,129 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
             }
 
         });
-        // var myDropzone = new Dropzone("div#mydropzone", { url: url});
-
-        /*      Dropzone.autoDiscover = false;
-
-        // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-        var previewNode = document.querySelector("#template");
-        previewNode.id = "";
-        var previewTemplate = previewNode.parentNode.innerHTML;
-        previewNode.parentNode.removeChild(previewNode);
-
-        var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-          url: "/target-url", // Set the url
-          thumbnailWidth: 80,
-          thumbnailHeight: 80,
-          parallelUploads: 20,
-          previewTemplate: previewTemplate,
-          autoQueue: false, // Make sure the files aren't queued until manually added
-          previewsContainer: "#previews", // Define the container to display the previews
-          clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-      });
-
-        myDropzone.on("addedfile", function(file) {
-          // Hookup the start button
-          file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
-      });
-
-        // Update the total progress bar
-        myDropzone.on("totaluploadprogress", function(progress) {
-          document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-      });
-
-        myDropzone.on("sending", function(file) {
-          // Show the total progress bar when upload starts
-          document.querySelector("#total-progress").style.opacity = "1";
-          // And disable the start button
-          file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-      });
-
-        // Hide the total progress bar when nothing's uploading anymore
-        myDropzone.on("queuecomplete", function(progress) {
-          document.querySelector("#total-progress").style.opacity = "0";
-      });
-
-        // Setup the buttons for all transfers
-        // The "add files" button doesn't need to be setup because the config
-        // `clickable` has already been specified.
-        document.querySelector("#actions .start").onclick = function() {
-          myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-      };
-      document.querySelector("#actions .cancel").onclick = function() {
-          myDropzone.removeAllFiles(true);
-      };
-
-      */
-
-  });
-$(document).on('click', '.stokekle', function () {
-    let url = $(this).data("url");
-    let urunid = $(this).data("urunid");
-    let urunadi = $(this).data("urunadi");
-    let secenekler = $(this).data("secenekler");
-    let seceneklerli = $(this).data("seceneklerli");
-    if (!$(".modal-dialog").hasClass("modal-lg")) $(".modal-dialog").addClass("modal-lg");
-    $("#myModalLabel").html('<h2 class="modal-title"><b>' + urunadi + '</b> Ürününe Seçenek ve Stok Ekleme</h2>');
-    $("#modalform").attr("action", url);
-    let ekle = '<div class="row ">' +
-    '<div class="col-md-12 ">' +
-    '<div class="d-flex justify-content-center">' +
-    '<select  multiple="multiple" id="my-select" name="my-select[]" class="searchable">' +
-    secenekler +
-    '</select>' +
-    '</div></div>' +
-    '<div class="col-md-12 ">' +
-    '<div class="d-flex justify-content-center">' +
-    '<div style="width: 50%">' +
-    '<button type="button" disabled="true" id="stoktanit"class="btn btn-primary btn-block mt-2 stoktanimla">Stokları Tanımla</button>' +
-    '</div></div>' +
-    '</div>' +
-    '<div id="stoklar" class="col-md-12 mt-3">'+
-    '</div>'+
-    '</div>';
-    let footer = '<button type="submit" disabled="true"  id="yukle" class="btn btn-primary">Kaydet</button>' +
-    '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
-    $("#modalfooter").html(footer);
-    $("#modalbody").html(ekle);
-
-    $('.searchable').multiSelect({
-        selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-        selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-        afterInit: function (ms) {
-            var that = this,
-            $selectableSearch = that.$selectableUl.prev(),
-            $selectionSearch = that.$selectionUl.prev(),
-            selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-            selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
-
-            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-            .on('keydown', function (e) {
-                if (e.which === 40) {
-                    that.$selectableUl.focus();
-                    return false;
-                }
-            });
-
-            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-            .on('keydown', function (e) {
-                if (e.which == 40) {
-                    that.$selectionUl.focus();
-                    return false;
-                }
-            });
-        },
-        afterSelect: function (value) {
-            this.qs1.cache();
-            this.qs2.cache();
-
-            if($("#my-select").val().length>0) {
-                $("#stoktanit").prop("disabled",false);
-                $("#yukle").prop("disabled",false);
-            }else{ 
-                $("#stoktanit").prop("disabled",true);
-                $("#yukle").prop("disabled",true);
-            }
-
-        },
-        afterDeselect: function (value) {
-            this.qs1.cache();
-            this.qs2.cache();
-
-            if($("#my-select").val().length>0) {
-                $("#stoktanit").prop("disabled",false);
-                $("#yukle").prop("disabled",false);
-            }else{ 
-                $("#stoktanit").prop("disabled",true);
-                $("#yukle").prop("disabled",true);
-                
-
-
-            }
-        }
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            $(".modal-dialog").removeClass("modal-lg");
+        })
     });
-    $('.tags').select2({
-        placeholder: 'Tag Seçiniz', allowClear: true
+    $(document).on('click', '.stokekle', function () {
+        let url = $(this).data("url");
+        let homepage=$(this).data("homepage");
+        let urunid = $(this).data("urunid");
+        let urunadi = $(this).data("urunadi");
+        let secenekler = $(this).data("secenekler");
+        let seceneklerli = $(this).data("seceneklerli");
+        if (!$(".modal-dialog").hasClass("modal-lg")) $(".modal-dialog").addClass("modal-lg");
+        $("#myModalLabel").html('<h2 class="modal-title"><b>' + urunadi + '</b> Ürününe Stok Ekleme</h2>');
+        $("#modalform").attr("action", url);
+        let ekle = 
+        '<div class="row ">' +
+        '<div class="col-md-12 ">' +
+        '<div class="d-flex justify-content-center">' +
+        
+
+        '<div class="form-label-group in-border">' +
+        '<div class="form-group border p-3" id="urunetiket'+urunadi+'">' +
+
+        '<select  multiple="multiple" name="my-select[]" class="searchable">' +
+        secenekler +
+        '</select>' +
+        '<label for="urunetiket'+urunadi+'">'+urunadi+' Stokları</label>' +
+        '</div></div>'+
+
+        '<div class="form-label-group in-border">' +
+        '<div class="form-group border p-3" id="urunetiket'+urunid+'">' +
+
+        '<select  multiple="multiple" name="my-select[]" class="searchable">' +
+        secenekler +
+        '</select>' +
+        '<label for="urunetiket'+urunid+'">'+urunid+' Stokları</label>' +
+        '</div></div>'+
+
+        '</div></div></div>'; /* +
 
 
+
+        '<div class="row">'+
+
+        '<div class="form-group">' +
+        '<div class="form-label-group in-border">' +
+        '<input type="number" step="any" class="form-control" placeholder="Ürün Fiyatı" name="price" id="price" autocomplete="off">' +
+        '<label for="price">Ürün Fiyatı</label>' +
+        '</div></div>';
+
+       '<div class="row ">' +
+        '<div class="col-md-12 ">' +
+        '<div class="d-flex justify-content-center">' +
+        '<select  multiple="multiple" id="my-select" name="my-select[]" class="searchable">' +
+        secenekler +
+        '</select>' +
+        '</div></div>' +
+        '<div class="col-md-12 ">' +
+        '<div class="d-flex justify-content-center">' +
+        '<div style="width: 50%">' +
+        '<button type="button" disabled="true" id="stoktanit"class="btn btn-primary btn-block mt-2 stoktanimla">Stokları Tanımla</button>' +
+        '</div></div>' +
+        '</div>' +
+        '<div id="stoklar" class="col-md-12 mt-3">'+
+        '</div>'+
+        '</div>';*/
+        let footer = '<button type="submit" disabled="true"  id="yukle" class="btn btn-primary">Kaydet</button>' +
+        '<button type="button" class="btn btn-danger" data-dismiss="modal">İptal</button>';
+        $("#modalfooter").html(footer);
+        $("#modalbody").html(ekle);
+
+        $('.searchable').multiSelect({
+            selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+            selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+            afterInit: function (ms) {
+                var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function (e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function (e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+            },
+            afterSelect: function (value) {
+                this.qs1.cache();
+                this.qs2.cache();
+                var name=AjaxGet(homepage+'admin/get_name_secenek/'+value);
+
+                stokgir(value,"ekle",name) ;
+
+            },
+            afterDeselect: function (value) {
+                this.qs1.cache();
+                this.qs2.cache();
+                var name=AjaxGet(homepage+'admin/get_name_secenek/'+value);
+
+                stokgir(value,"sil",name);
+            }
+        });
+        $('.tags').select2({
+            placeholder: 'Tag Seçiniz', allowClear: true
+
+
+        });
     });
-});
 
 $('#myModal').on('hidden.bs.modal', function (e) {
     $(".modal-dialog").removeClass("modal-lg");
 })
-
-function serializeet() {
-    fields = $(".tags").serializeArray()
-    var result = [];
-    jQuery.each(fields, function (i, field) {
-        result.push(field.value + " ");
-    });
-    $("#taglar").val(result);
-}
-
 $(document).on('click', '.altguncelle', function () {
     var title = $(this).data("title");
     var altid = $(this).data("altid");

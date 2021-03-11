@@ -9,6 +9,7 @@
 				<p>Burada herhangi bir veri bulunmamaktadır. Eklemek için lütfen <span class="text-danger yeniekle"
 					data-altid="0" data-toggle="modal" data-target="#myModal"
 					data-kategoriler="<?php echo selectBoxKategori(); ?>"
+					data-secenekler="<?php echo selectBoxSecenekler(); ?>"
 					data-url='<?php echo base_url("admin/save_urunler"); ?>'>tıklayınız</span></p>
 				</div>
 			</div>
@@ -18,6 +19,8 @@
 					<button data-altid="0" data-toggle="modal" data-target="#myModal"
 					data-url='<?php echo base_url("admin/save_urunler"); ?>'
 					data-kategoriler="<?php echo selectBoxKategori(); ?>"
+					data-secenekler="<?php echo selectBoxSecenekler(); ?>"
+
 					class="btn btn-outline btn-primary yeniekle btn-xs-block">
 					<i class="fa fa-plus"></i>  Yeni Ekle
 				</button>
@@ -49,69 +52,68 @@
 										<td><?=($item->discount)?"<del class='text-red'>".$item->price." TL</del> ".$item->discount." TL":$item->price." TL"?></td>
 										<td>
 											<div class="d-flex justify-content-center">
-												<?php if ($item->complete!=2) { ?> 
+												<?php if ($item->complete==0) { ?> 
 													<button type="button" data-analiste="evet"
-                                                            data-secenekler="<?php echo selectBoxSecenekler(); ?>"
-                                                            data-seceneklerli="<?php echo listBoxSecenekler(); ?>"
 													data-toggle="modal" data-target="#myModal"
 													data-urunid="<?=$item->id?>"
 													data-urunadi="<?=$item->title?>"
-													data-url="<?=(($item->complete==0)?base_url("admin/resimekle_urunler/$item->id"):(
-													($item->complete==1)?base_url("admin/stokekle_urunler/$item->id"):""))?>"
-													class="btn btn-sm btn-primary btn-outline <?=(($item->complete==0)?"resimekle":(($item->complete==1)?"stokekle":""))?>">
-													<i class="<?=(($item->complete==0)?"fas fa-image":(
-													($item->complete==1)?"fas fa-cog":""))?>"></i>
-													<span class="d-none d-sm-inline px-1">
-														<?=(($item->complete==0)?" Resim Ekle":(
-															($item->complete==1)?" Stok Ekle":""))?> 
-														</span>
-													</button>
-												<?php } if ($item->complete==2) { ?>
-													<i class="fas fa-check-double"></i><span class="d-none d-sm-inline px-1">
-														Ürün Hazır
-													</span>
+													data-url="<?=base_url("admin/resimekle_urunler/$item->id")?>"
+													class="btn btn-sm btn-primary btn-outline resimekle">
+													<i class="fas fa-image"></i>
+													<span class="d-none d-sm-inline px-1">Resim Ekle</span>
+												</button>
+											<?php } if ($item->complete==1) { ?>
+												<a href="<?=base_url('admin/stokekle_urunler/'.$item->id)?>"
+													class="btn btn-sm btn-primary btn-outline stokekle">
+													<i class="fas fa-cog"></i>
+													<span class="d-none d-sm-inline px-1">Stok Ekle</span>
+												</a>
+											<?php } if ($item->complete==2) { ?>
+												<i class="fas fa-check-double"></i><span class="d-none d-sm-inline px-1">
+													Ürün Hazır
+												</span>
 
-												<?php	} ?>
+											<?php	} ?>
 
-											</div>
-										</td>
-										<td class="text-center w300" >
-											<div class="d-flex justify-content-center">
-												<button  data-analiste="evet"
-												data-url="<?php echo base_url("admin/delete_kategoriler/$item->id"); ?>"
-												class="btn btn-sm btn-danger btn-outline remove-btn " >
-												<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil </span>
-											</button>
-											<button data-altid="<?=$item->id?>" style="margin-left: 1rem;"
-												type="button" data-toggle="modal" data-target="#myModal"
-												data-title="<?=$item->title?>"
-												data-url='<?php echo base_url("admin/update_kategoriler/").$item->id; ?>'
-												class="btn btn-sm btn-info btn-outline altguncelle ">
-												<i class="fas fa-edit"></i><span class="d-none d-sm-inline">Düzenle</span>
-											</button>
 										</div>
 									</td>
-								</tr>
+									<td class="text-center w300" >
+										<div class="d-flex justify-content-center">
+											<button  data-analiste="evet"
+											data-url="<?php echo base_url("admin/delete_kategoriler/$item->id"); ?>"
+											class="btn btn-sm btn-danger btn-outline remove-btn " >
+											<i class="fa fa-trash"></i><span class="d-none d-sm-inline"> Sil </span>
+										</button>
+										<button data-altid="<?=$item->id?>" style="margin-left: 1rem;"
+											type="button" data-toggle="modal" data-target="#myModal"
+											data-title="<?=$item->title?>"
+											data-url='<?php echo base_url("admin/update_kategoriler/").$item->id; ?>'
+											class="btn btn-sm btn-info btn-outline altguncelle ">
+											<i class="fas fa-edit"></i><span class="d-none d-sm-inline">Düzenle</span>
+										</button>
+									</div>
+								</td>
+							</tr>
 
-							<?php } ?>
+						<?php } ?>
 
-						</tbody>
+					</tbody>
 
-					</table>
+				</table>
 
 
 
-				</div><!-- .widget -->
+			</div><!-- .widget -->
 
-			</div>
-		</div>	
-	</div><!-- END column -->
+		</div>
+	</div>	
+</div><!-- END column -->
 
-	<div class="col-md-12">
-		<div id="altliste" status="false">
+<div class="col-md-12">
+	<div id="altliste" status="false">
 
-		</div>	
-	</div>
+	</div>	
+</div>
 </div>
 </div>
 <?php } ?>
