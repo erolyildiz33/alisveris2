@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.0-rc1
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: localhost
--- Üretim Zamanı: 09 Mar 2021, 23:44:56
--- Sunucu sürümü: 5.7.31-log
--- PHP Sürümü: 7.4.12
+-- Üretim Zamanı: 12 Mar 2021, 16:06:34
+-- Sunucu sürümü: 5.7.27-log
+-- PHP Sürümü: 7.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -63,12 +63,11 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `ustmenu`, `title`, `rank`, `isActive`, `createdAt`) VALUES
 (1, 0, 'Giyim', 0, 0, '2021-02-09 15:09:36'),
-(3, 0, 'Baska', 2, 0, '2021-02-09 16:40:26'),
 (4, 1, 'pantolon', 0, 1, '2021-02-09 15:36:45'),
 (6, 3, 'Video', 0, 1, '2021-02-11 09:11:22'),
 (7, 5, 'Uzuun Ceket', 1, 1, '2021-02-12 11:34:45'),
 (10, 5, 'kısa ceket', 0, 0, '2021-02-12 15:24:05'),
-(12, 0, 'Şükrü', 1, 1, '2021-02-18 11:05:46'),
+(12, 0, 'Şükrü', 2, 1, '2021-02-18 11:05:46'),
 (16, 14, 'ornek', 0, 1, '2021-02-18 11:15:16'),
 (17, 12, 'deneme', 0, 1, '2021-02-18 11:17:36'),
 (18, 1, 'deneme2', 1, 1, '2021-02-18 11:18:03'),
@@ -130,7 +129,15 @@ INSERT INTO `images` (`id`, `product_id`, `path`, `master`) VALUES
 (1, 1, 'assets/upload/products/prod-12.jpg', 0),
 (2, 1, 'assets/upload/products/prod-21.jpg', 0),
 (3, 1, 'assets/upload/products/prod-22.jpg', 0),
-(4, 1, 'assets/upload/products/prod-3.jpg', 0);
+(4, 1, 'assets/upload/products/prod-3.jpg', 0),
+(5, 2, 'assets/upload/products/prod-13.jpg', 0),
+(6, 2, 'assets/upload/products/prod-23.jpg', 0),
+(7, 2, 'assets/upload/products/prod-14.jpg', 0),
+(8, 2, 'assets/upload/products/prod-24.jpg', 0),
+(9, 2, 'assets/upload/products/prod-15.jpg', 0),
+(10, 2, 'assets/upload/products/prod-25.jpg', 0),
+(11, 2, 'assets/upload/products/photo1.png', 0),
+(12, 2, 'assets/upload/products/default-150x150.png', 0);
 
 -- --------------------------------------------------------
 
@@ -164,11 +171,13 @@ INSERT INTO `options` (`id`, `name`, `slug`) VALUES
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `category` int(254) NOT NULL,
+  `options` varchar(254) COLLATE utf8mb4_turkish_ci DEFAULT NULL,
   `title` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
   `subtitle` varchar(254) COLLATE utf8mb4_turkish_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_turkish_ci NOT NULL,
   `price` float DEFAULT NULL,
   `discount` float DEFAULT NULL,
+  `qrcode` varchar(254) COLLATE utf8mb4_turkish_ci DEFAULT NULL,
   `tag` varchar(254) COLLATE utf8mb4_turkish_ci DEFAULT NULL,
   `complete` int(1) NOT NULL DEFAULT '0',
   `active` int(1) NOT NULL DEFAULT '0',
@@ -179,8 +188,8 @@ CREATE TABLE `products` (
 -- Tablo döküm verisi `products`
 --
 
-INSERT INTO `products` (`id`, `category`, `title`, `subtitle`, `description`, `price`, `discount`, `tag`, `complete`, `active`, `date`) VALUES
-(1, 1, 'ürün adı', 'açıklama', 'uzun açıklama', 30, 20, NULL, 1, 0, '2021-03-08 21:31:23');
+INSERT INTO `products` (`id`, `category`, `options`, `title`, `subtitle`, `description`, `price`, `discount`, `qrcode`, `tag`, `complete`, `active`, `date`) VALUES
+(2, 1, '6,7', 'Nike Ayakkabı', 'kısa açıklama', 'uzun açıklama', 100, 80, 'assets/upload/qrcode/urun_2.png', 'yeni,sezon', 1, 0, '2021-03-11 07:31:35');
 
 -- --------------------------------------------------------
 
@@ -203,7 +212,10 @@ INSERT INTO `suboptions` (`id`, `option_id`, `name`) VALUES
 (3, 6, '34'),
 (4, 6, '35'),
 (5, 6, '36'),
-(6, 6, '32');
+(6, 6, '32'),
+(7, 7, 'Small (S)'),
+(8, 7, ' Medium (M)'),
+(9, 7, ' Large (L)');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -277,7 +289,7 @@ ALTER TABLE `config`
 -- Tablo için AUTO_INCREMENT değeri `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `options`
@@ -289,13 +301,13 @@ ALTER TABLE `options`
 -- Tablo için AUTO_INCREMENT değeri `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `suboptions`
 --
 ALTER TABLE `suboptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
