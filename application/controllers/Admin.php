@@ -48,6 +48,11 @@ class Admin extends CI_Controller
 	    $option=Secenekler::find($suboption->option_id);
 	    echo json_encode(["id"=>$suboption->id,"name"=>$suboption->name,"ustid"=>$option->id,"ustname"=>$option->name]);
 	}
+	public function get_name_altsecenek($id){
+        $suboption=AltSecenekler::find($id);
+	    
+	    echo $suboption->name;
+	}
 	public function stokekle_urunler($id){
 		$viewData = new stdClass();
 		$secenekler=new stdClass();		
@@ -62,6 +67,7 @@ class Admin extends CI_Controller
 		}
 		$secenekler=$tumsecenekler;		
 		$viewData->secenekler = $secenekler;
+		
 		$this->load->view('back/urunler/stock', $viewData);
 
 	}
