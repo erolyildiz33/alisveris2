@@ -65,10 +65,10 @@
 
 <link rel="stylesheet" href="<?= base_url('assets/back') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
-href="<?= base_url('assets/back') ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+      href="<?= base_url('assets/back') ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="<?= base_url('assets/back') ?>/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 <link href="<?= base_url('assets/back') ?>/dist/css/select2.min.css" rel="stylesheet"/>
 <link href="<?= base_url('assets/back') ?>/dist/dropzone.css" rel="stylesheet"/>
 <link href="<?= base_url('assets/back') ?>/build/css/multi-select.css" rel="stylesheet"/>
@@ -94,126 +94,287 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstr
 <script src="<?= base_url('assets/back') ?>/build/js/jquery.quicksearch.js"></script>
 
 
-<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+      rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script type="text/javascript">
- $("#yukle").click(function(){
-    let toplumu=$("#toplumu").prop('checked');
-  
-    if (toplumu){
+    $("#yukle").click(function () {
+            var secimlerim = [];
+            var hata = false;
+            var icerik = $("#urunid").data("options");
+            if (icerik.toString().includes(",")) {
+                var options = icerik.split(",");
+                $.each(options, function (key, val) {
+                    if (!$("#secenek" + val).val().length > 0) {
+                        iziToast.error({
+                            title: 'Hata',
+                            message: $("#secenek" + val).data("optionname") + ' için Alt Seçenek Seçiniz!',
+                            position: 'topRight'
+                        });
+                        hata = true;
+                        return false;
+                    }
+                    $.each($("#secenek" + val + " option:selected"), function () {
+                        secimlerim.push({
+                            option_id: $.trim(val), sub_id: $.trim($(this).val()), sub_name: $.trim($(this).text()),
+                        });
+                    });
+                });
+            } else {
+                if (!$("#secenek" + icerik).val().length > 0) {
+                    iziToast.error({
+                        title: 'Hata',
+                        message: $("#secenek" + icerik).data("optionname") + ' için Alt Seçenek Seçiniz!',
+                        position: 'topRight'
+                    });
+                    hata = true;
+                    return false;
 
-  console.log()
+
+                }
+                $.each($("#secenek" + icerik + " option:selected"), function () {
+                    secimlerim.push({
+                        option_id: $.trim(icerik), sub_id: $.trim($(this).val()), sub_name: $.trim($(this).text()),
+                    });
+                });
+
+            }
+            let toplumu = $("#toplumu").prop('checked');
+            if (toplumu) {
+                if (hata) {
+                    return false;
+                }
+                let miktar = $("#toplamstok").val();
+                if (!miktar) {
+                    iziToast.error({
+                        title: 'Hata',
+                        message: 'Toplu Stok Miktarı Belirtiniz!',
+                        position: 'topRight'
+                    });
+                    return false;
+                }
+                var data = [{urunid: $("#urunid").val(), miktar: miktar, secimler: secimlerim}];
+                AjaxPost($("#homepage").val() + "admin/stokkaydet", {data});
+            } else {
+                if (hata) {
+                    return false;
+                }
+                var hatasec = false;
+                $.each(secimlerim, function (k, v) {
+                    let value = $("#secenek_" + v.option_id + "_" + v.sub_id).val();
+                    if (!value) {
+                        iziToast.error({
+                            title: 'Hata',
+                            message: v.sub_name + ' için Stok Miktarı Belirtiniz!',
+                            position: 'topRight'
+                        });
+                        hatasec = true;
+                        return false;
+                    } else {
+                        secimlerim[k].stokmiktari = value;
+                    }
+                })
+                if (hatasec) {
+                    return false;
+                }
+
+                var tekildata = [{urunid: $("#urunid").val(),  secimler: secimlerim}];
+                AjaxPost($("#homepage").val() + "admin/stokkaydet", {tekildata});
+
+            }
+        }
+    );
+
+    $('#toplumu').change(function () {
+        let status = $(this).prop('checked');
+        if (!status) {
+            var groub = "";
+            $("#toplamstoktag").hide();
+            var icerik = $("#urunid").data("options");
+            if (icerik.toString().includes(",")) {
+                var options = icerik.split(",");
+                $.each(options, function (key, val) {
+                    var secililerval = $("#secenek" + val).val();
+                    var secililertext = [];
+                    $.each($("#secenek" + val + " option:selected"), function () {
+                        secililertext.push($(this).text());
+                    });
+                    if (secililerval.length > 0) {
+                        groub += '<div class="test border rounded">' +
+                            '<span class="baslik">' + $("#secenek" + val).data("optionname") + ' Seçenekleri</span>' +
+                            '<div class="col-md-12"><div class="row px-3">';
+                        $.each(secililerval, function (k, v) {
+                            groub += '<div class="col-md-4 mt-4">' +
+                                '<div class="form-label-group in-border" style="line-height: 1.5;">' +
+                                '<input class="form-control"  name="secenek_' + val + '_' + v + '" id="secenek_' + val + '_' + v + '" autocomplete="off">' +
+                                '<label for="secenek_' + v + '">' + secililertext[k] + ' için Stok Miktarı</label>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                        groub += '</div></div></div>';
+                    }
+                });
+            } else {
+                var secililerval = $("#secenek" + icerik).val();
+                var secililertext = [];
+                $.each($("#secenek" + icerik + " option:selected"), function () {
+                    secililertext.push($(this).text());
+                });
+                if (secililerval.length > 0) {
+                    groub += '<div class="test border rounded">' +
+                        '<span class="baslik">' + $("#secenek" + icerik).data("optionname") + ' Seçenekleri</span>' +
+                        '<div class="col-md-12"><div class="row px-3">';
+                    $.each(secililerval, function (k, v) {
+                        groub += '<div class="col-md-4 mt-4">' +
+                            '<div class="form-label-group in-border" style="line-height: 1.5;">' +
+                            '<input class="form-control"  name="secenek_' + icerik + '_' + v + '" id="secenek_' + icerik + '_' + v + '" autocomplete="off">' +
+                            '<label for="secenek_' + v + '">' + secililertext[k] + ' için Stok Miktarı</label>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    groub += '</div></div></div>';
+                }
+
+            }
 
 
-      /*  AjaxPost($("#homepage").val()+"admi/stokkaydet",{
-            urunid:$("#urunid").val(),
-            
-            secenekler:,
-            altsecenekler:,
-            stok:,
-        });
-*/
+            $("#altliste").html(groub);
 
 
+        } else {
+            $("#altliste").html("");
+            $("#toplamstoktag").show();
 
-    }
-
-
-
-
-
-
-
-
-});
-
- $('#toplumu').change(function() {
-    let status=$(this).prop('checked');
-    if (!status)
-    {
-        $("#toplamstoktag").hide();
-        $("#tekilstoktag").show();
-    }
-    else{
-        $("#toplamstoktag").show();
-        $("#tekilstoktag").hide();
-        $("#altliste").html("");
-    }
-});
- $("#tekilstoktag").click(function(){
-    options=$(this).data("options").split(",");
-    groub="";
-    $.each(options,function(key,val){
-        var secililer=$("#option"+val).val();
-        if (secililer.length >0)
-        { 
-
-            groub+='<div class="test border rounded">'+
-            '<span class="baslik">'+$("#option"+val).data("optionname")+' Seçenekleri</span>'+
-            '<div class="col-md-12"><div class="row px-3">';
-            $.each(secililer,function(k,v){     
-              suboption=AjaxGet($("#homepage").val() + 'admin/get_name_altsecenek/' + v);           
-              groub+=  '<div class="col-md-4 mt-4">'+
-              '<div class="form-label-group in-border" style="line-height: 1.5;">' +
-              '<input class="form-control"  name="secenek_' + val +'_'+ v + '" id="secenek_' + v+ '" autocomplete="off">' +
-              '<label for="secenek_' + v + '">' + suboption + ' için Stok Miktarı</label>' +
-              '</div>' +
-              '</div>';
-          });
-            groub+='</div></div></div>';
         }
     });
 
-    $("#altliste").html(groub);
-});
 
- $('.searchable').multiSelect({
+    $('.searchable').multiSelect({
 
-    selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-    selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
-    afterInit: function (ms) {
+        selectableHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+        selectionHeader: "<input type='text' class='search-input rounded mb-2 border pl-2' style='width: 100%;' autocomplete='off' placeholder='Ara'>",
+        afterInit: function (ms) {
 
-        var that = this,
-        $selectableSearch = that.$selectableUl.prev(),
-        $selectionSearch = that.$selectionUl.prev(),
-        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
-        that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-        .on('keydown', function (e) {
-            if (e.which === 40) {
-                that.$selectableUl.focus();
-                return false;
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function (e) {
+                    if (e.which === 40) {
+                        that.$selectableUl.focus();
+                        return false;
+                    }
+                });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function (e) {
+                    if (e.which == 40) {
+                        that.$selectionUl.focus();
+                        return false;
+                    }
+                });
+        },
+        afterSelect: function (value) {
+
+            this.qs1.cache();
+            this.qs2.cache();
+
+        },
+        afterDeselect: function (value) {
+            this.qs1.cache();
+            this.qs2.cache();
+
+
+        }
+    });
+    $(".searchable").change(function () {
+
+        var hata = false;
+        if (!$('#toplumu').prop('checked')) {
+            var groub = "";
+            var icerik = $("#urunid").data("options");
+            if (icerik.toString().includes(",")) {
+                var options = icerik.split(",");
+                $.each(options, function (key, val) {
+                    var secililerval = $("#secenek" + val).val();
+                    var secililertext = [];
+                    $.each($("#secenek" + val + " option:selected"), function () {
+                        secililertext.push($(this).text());
+                    });
+
+                    if (!secililerval.length > 0) {
+                        hata = true;
+                        return false;
+                    } else {
+
+                        groub += '<div class="test border rounded">' +
+                            '<span class="baslik">' + $("#secenek" + val).data("optionname") + ' Seçenekleri</span>' +
+                            '<div class="col-md-12"><div class="row px-3">';
+                        $.each(secililerval, function (k, v) {
+                            groub += '<div class="col-md-4 mt-4">' +
+                                '<div class="form-label-group in-border" style="line-height: 1.5;">' +
+                                '<input class="form-control"  name="secenek_' + val + '_' + v + '" id="secenek_' + val + '_' + v + '" autocomplete="off">' +
+                                '<label for="secenek_' + v + '">' + secililertext[k] + ' için Stok Miktarı</label>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                        groub += '</div></div></div>';
+
+
+                    }
+                });
+
+
+            } else {
+
+                if (!$("#secenek" + icerik).val().length > 0) {
+                    hata = true;
+                    groub="";
+                    $("#toplumu").bootstrapToggle('on');
+                    $("#toplumu").prop("disabled", true);
+                    return false;
+                } else {
+                    var secililerval = $("#secenek" + icerik).val();
+                    var secililertext = [];
+                    $.each($("#secenek" + icerik + " option:selected"), function () {
+                        secililertext.push($(this).text());
+                    });
+                    if (secililerval.length > 0) {
+                        groub += '<div class="test border rounded">' +
+                            '<span class="baslik">' + $("#secenek" + icerik).data("optionname") + ' Seçenekleri</span>' +
+                            '<div class="col-md-12"><div class="row px-3">';
+                        $.each(secililerval, function (k, v) {
+                            groub += '<div class="col-md-4 mt-4">' +
+                                '<div class="form-label-group in-border" style="line-height: 1.5;">' +
+                                '<input class="form-control"  name="secenek_' + icerik + '_' + v + '" id="secenek_' + icerik + '_' + v + '" autocomplete="off">' +
+                                '<label for="secenek_' + v + '">' + secililertext[k] + ' için Stok Miktarı</label>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                        groub += '</div></div></div>';
+                    }else{
+
+                    }
+                }
             }
-        });
+            $("#altliste").html(groub);
 
-        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-        .on('keydown', function (e) {
-            if (e.which == 40) {
-                that.$selectionUl.focus();
-                return false;
-            }
-        });
-    },
-    afterSelect: function (value) {
-
-        this.qs1.cache();
-        this.qs2.cache();
-
-    },
-    afterDeselect: function (value) {
-        this.qs1.cache();
-        this.qs2.cache();
+        }
 
 
-    }
-});
+        if (!hata) $("#toplumu").prop("disabled", false);
+        else {
+            $("#toplumu").bootstrapToggle('on');
+            $("#toplumu").prop("disabled", true);
+        }
 
+    });
 
- $('.tags').select2({
-    placeholder: 'Tag Seçiniz', allowClear: true
-
-
-});
+    $('.tags').select2({
+        placeholder: 'Tag Seçiniz', allowClear: true
+    });
 
 </script>

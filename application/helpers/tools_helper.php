@@ -134,7 +134,7 @@ function selectBoxAltSecenekler($sec,$id = 0, $x = 0)
     $alt=AltSecenekler::select(["option_id"=>$sec]);
     if ($alt)
     foreach ($alt as $row) {
-        echo "<option data-option='".$sec."' value=" . $row->id . ">" . $row->name . "</option>"; 
+        echo "<option  value=" . $row->id . ">" . $row->name . "</option>";
     }     
 
         
