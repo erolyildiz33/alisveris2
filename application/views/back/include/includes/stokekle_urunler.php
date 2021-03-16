@@ -98,6 +98,67 @@
       rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function() { 
+    
+        // this function to search and show matched input
+    function matchCustom(params, data) {
+
+    if ($.trim(params.term) === '') { return data; }
+
+    if (typeof data.text === 'undefined') { return null; }
+
+    if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1) {
+      var modifiedData = $.extend({}, data, true);
+      modifiedData.text += '';
+     return modifiedData; }
+
+    return null; }
+
+  $(".select2").select2({
+  matcher: matchCustom
+  });
+    
+    var disableTableBody = function(value){
+           $('#tableBody option[value="'+ value +'"]').prop('disabled',true);
+    };
+    
+    var enableTableBody = function(value){
+       $('#tableBody option[value="'+ value +'"]').prop('disabled',false);
+    };
+    
+       var disableTableHeader = function(value){
+           $('#tableHeader option[value="'+ value +'"]').prop('disabled',true);
+    };
+    
+    var enableTableHeader = function(value){
+       $('#tableHeader option[value="'+ value +'"]').prop('disabled',false);
+    };
+    
+    
+   $("#tableHeader").change(function(){
+               disableTableBody($(this).val());  
+   });
+   
+   $('#tableHeader').on("select2:unselecting", function(e){
+            enableTableBody($(this).val());
+   });
+
+   $("#tableBody").change(function(){
+               disableTableHeader($(this).val());  
+   });
+   
+   $('#tableBody').on("select2:unselecting", function(e){
+            enableTableHeader($(this).val());
+   });
+
+});
+   
+</script>
+
+
+
+
+<script type="text/javascript">
     $("#yukle").click(function () {
             var secimlerim = [];
             var hata = false;

@@ -95,6 +95,41 @@ function get_sub_category_title($category_id = 0)
 
 }
 
+
+
+
+function selectBoxKategoriGroub($id=0){
+
+   $query = Kategoriler::select(["ustmenu"=> $id]);
+
+   if ($query) {
+
+    foreach ($query as $row) { 
+        if(Kategoriler::select(["ustmenu"=> $row->id])){
+           echo "<optgroup label=".$row->title.">";
+          selectBoxKategoriGroub($row->id);
+       }else{
+        echo "</optgroup>";
+
+        echo '<option>'.$row->title.'</option>';
+    }
+    
+
+
+}
+
+//selectBoxKategoriGroub($row->id);
+
+
+}
+else{
+   echo "</optgroup>";
+}
+}
+
+
+
+
 function selectBoxKategori($id = 0, $x = 0)
 {
     $ci =& get_instance();
@@ -133,20 +168,20 @@ function selectBoxAltSecenekler($sec,$id = 0, $x = 0)
     $ci =& get_instance();
     $alt=AltSecenekler::select(["option_id"=>$sec]);
     if ($alt)
-    foreach ($alt as $row) {
-        echo "<option  value=" . $row->id . ">" . $row->name . "</option>";
-    }     
+        foreach ($alt as $row) {
+            echo "<option  value=" . $row->id . ">" . $row->name . "</option>";
+        }     
 
         
-}
+    }
 
-function listBoxSecenekler($id = 0, $x = 0)
-{
-    $ci =& get_instance();
-    $query = Secenekler::select();
-    if ($query) {
-        foreach ($query as $row) {
-         if (AltSecenekler::select(["option_id"=>$row->id])) echo "<li class='list-group-item' value=" . $row->id . ">" . $row->name . "</li>";
-     }
- }
-}
+    function listBoxSecenekler($id = 0, $x = 0)
+    {
+        $ci =& get_instance();
+        $query = Secenekler::select();
+        if ($query) {
+            foreach ($query as $row) {
+               if (AltSecenekler::select(["option_id"=>$row->id])) echo "<li class='list-group-item' value=" . $row->id . ">" . $row->name . "</li>";
+           }
+       }
+   }
